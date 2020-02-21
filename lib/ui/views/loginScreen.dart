@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:dash_n_dine/ui/views/loginAnimation/staggeredAnimation.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -157,6 +158,36 @@ class _UserCustomSocialMediaLoginExpand extends StatelessWidget {
 
 class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
 
+  AnimationController _loginButtonController;
+  var animationStatus = 0;
+
+  @override
+  void initState(){
+    _loginButtonController = AnimationController(
+        duration: Duration(milliseconds: 3000),
+        vsync: this
+    );
+
+    super.initState();
+  }
+
+  Future<Null> _playAnimation() async {
+    await _loginButtonController.reset();
+
+    try {
+      await _loginButtonController.forward().whenComplete((){
+        animationStatus = 0;
+      });
+    } on TickerCanceled{}
+  }
+
+
+  @override
+  void dispose(){
+    _loginButtonController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +325,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                 )
               ],
             ),
-            Container(
+            (animationStatus == 0)
+            ? Container(
               padding: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.95 - 180
               ),
@@ -312,6 +344,10 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                       ),
                       color: Theme.of(context).primaryColor,
                       onPressed: () {
+                        setState(() {
+                          animationStatus = 1;
+                        });
+                        _playAnimation();
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(
@@ -338,6 +374,10 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                   )
                 ],
               ),
+            )
+            : StaggeredAnimation(
+              buttonController: _loginButtonController,
+              screenSize: MediaQuery.of(context).size
             )
           ],
         ),
