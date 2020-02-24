@@ -1,4 +1,4 @@
-import 'package:dash_n_dine/ui/views/mainHomePage.dart';
+import 'package:dash_n_dine/ui/views/MainPage.dart';
 import 'package:flutter/material.dart';
 import '../../../main.dart';
 
@@ -47,7 +47,7 @@ class _FadeContainerState extends State<FadeContainer> with TickerProviderStateM
 				body: AnimatedBuilder(
 						animation: _screenController,
 						builder: (context, child){
-							return MainHomePage();
+							return MainPage();
 						}
 				)
 		);

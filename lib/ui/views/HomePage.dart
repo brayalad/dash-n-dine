@@ -157,6 +157,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 		);
 
 		return Container(
+			height: MediaQuery.of(context).size.height,
+			decoration: BoxDecoration(
+				color: Theme.of(context).primaryColor
+			),
 			child: Column(
 				children: <Widget>[
 					logo,

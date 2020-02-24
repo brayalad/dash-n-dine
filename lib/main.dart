@@ -1,3 +1,4 @@
+import 'package:dash_n_dine/ui/views/MainPage.dart';
 import 'package:dash_n_dine/ui/views/ProfilePage.dart';
 import 'package:dash_n_dine/ui/views/loginScreen.dart';
 import 'package:dash_n_dine/ui/views/signupPage.dart';
@@ -34,13 +35,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(
-        
-      ),
-      body: Center(
-        child: SignUpPage()
-      )
-    );
+    return MainPage();
   }
 }
