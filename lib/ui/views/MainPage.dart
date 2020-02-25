@@ -3,6 +3,7 @@ import 'package:dash_n_dine/ui/views/HomePage.dart';
 import 'package:flutter/material.dart';
 
 import 'ProfilePage.dart';
+import 'SearchPage.dart';
 
 class MainPage extends StatefulWidget {
 	@override
@@ -23,6 +24,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 		if(page == 0){
 			return HomePage();
 		}
+		if(page == 1){
+			return SearchPage();
+		}
+
 		if(page == 3){
 			return ProfilePage();
 		}
