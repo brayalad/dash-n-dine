@@ -1,40 +1,48 @@
-import 'package:dash_n_dine/ui/views/MainPage.dart';
-import 'package:dash_n_dine/ui/views/ProfilePage.dart';
-import 'package:dash_n_dine/ui/views/loginScreen.dart';
-import 'package:dash_n_dine/ui/views/signupPage.dart';
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-void main() => runApp(MyApp());
+import 'package:flutter/material.dart';
+import './ui/router.dart';
+
+import 'locator.dart';
+import 'package:provider/provider.dart';
+import './ui/shared/theme.dart';
+
+void main(){
+  setupLocator();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    return ChangeNotifierProvider<ThemeDelegate>(
+      create: (_) => ThemeDelegate(),
+      child: MaterialAppWithTheme(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-
-
-  final String title;
-
+class MaterialAppWithTheme extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MaterialAppWithThemeState createState() => _MaterialAppWithThemeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+
+class _MaterialAppWithThemeState extends State<MaterialAppWithTheme> {
 
   @override
   Widget build(BuildContext context) {
-
-    return MainPage();
+    final theme = Provider.of<ThemeDelegate>(context);
+    return MultiProvider(
+      providers: [
+      ],
+      child: MaterialApp(
+        onGenerateRoute: Router.generateRoute,
+        initialRoute: '/splashPage',
+        theme: theme.getTheme(),
+        title: 'Dash N Dine',
+      ),
+    );
   }
 }
+

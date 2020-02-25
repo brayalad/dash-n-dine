@@ -1,4 +1,7 @@
+import 'package:dash_n_dine/ui/views/HomePage.dart';
+import 'package:dash_n_dine/ui/views/MainPage.dart';
 import 'package:dash_n_dine/ui/views/ProfilePage.dart';
+import 'package:dash_n_dine/ui/views/SplashPage.dart';
 import 'package:dash_n_dine/ui/views/loginScreen.dart';
 import 'package:dash_n_dine/ui/views/signupPage.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +21,12 @@ class Router {
 				return MaterialPageRoute(builder: (_) => SignUpPage());
 			case '/profilePage':
 				return MaterialPageRoute(builder: (_) => ProfilePage());
+			case '/homePage':
+				return MaterialPageRoute(builder: (_) => HomePage());
+			case '/mainPage':
+				return MaterialPageRoute(builder: (_) => MainPage());
+			case '/splashPage':
+				return MaterialPageRoute(builder: (_) => SplashPage());
 			default:
 				return MaterialPageRoute(
 					builder: (_) => Scaffold(
