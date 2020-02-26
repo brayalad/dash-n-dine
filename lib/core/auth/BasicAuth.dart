@@ -18,12 +18,16 @@ class BasicAuth implements Auth {
   }
 
 	@override
-	Future<String> signUp(String email, String password) async {
+	Future<String> signUp(String email, String password, String name) async {
 		AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
 				email: email,
 				password: password
 		);
+		UserUpdateInfo info = UserUpdateInfo();
+		info.displayName = name;
+
 		FirebaseUser user = result.user;
+		user.updateProfile(info);
 
 		return user.uid;
 	}

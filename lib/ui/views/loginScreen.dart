@@ -9,21 +9,25 @@ const _validEmailPattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)
 
 
 class LoginScreen extends StatefulWidget {
+  final PageController controller;
 
-  LoginScreen({Key key}) : super(key: key);
+  LoginScreen({Key key, this.controller}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState(controller: controller);
 }
 
 class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
   final Auth auth = BasicAuth();
-
+  final PageController controller;
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+
   TextEditingController _emailInputController;
   TextEditingController _pswdInputController;
   AnimationController _loginButtonController;
   var animationStatus = 0;
+
+  _LoginScreenState({this.controller});
 
   @override
   void initState(){
@@ -64,6 +68,13 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     super.dispose();
   }
 
+  gotoSignUp() {
+    controller.animateToPage(
+      2,
+      duration: Duration(milliseconds: 800),
+      curve: Curves.ease,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +101,51 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       ),
     );
 
+    final forgotPassword = Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(
+              right: 20.0
+          ),
+          child: FlatButton(
+            child: Text(
+              'Forgot Password?',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 15.0
+              ),
+              textAlign: TextAlign.end,
+            ),
+            onPressed: () => {},
+          ),
+        )
+      ],
+    );
+
+    final noAccount = Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(
+              right: 20.0
+          ),
+          child: FlatButton(
+            child: Text(
+              'Dont Have an Account?',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 15.0
+              ),
+              textAlign: TextAlign.end,
+            ),
+            onPressed: () => gotoSignUp(),
+          ),
+        )
+      ],
+    );
 
     return SingleChildScrollView(
       child: Container(
@@ -115,28 +171,8 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                     controller: _pswdInputController,
                 ),
                 _divider,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          right: 20.0
-                      ),
-                      child: FlatButton(
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 15.0
-                          ),
-                          textAlign: TextAlign.end,
-                        ),
-                        onPressed: () => {},
-                      ),
-                    )
-                  ],
-                ),
+                forgotPassword,
+                noAccount,
                 Expanded(
                   child: Container(
 

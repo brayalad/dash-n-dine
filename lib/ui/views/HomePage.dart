@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 						),
 					),
 					Text(
-						'N',
+						" N' ",
 						style: TextStyle(
 								color: Colors.white,
 								fontSize: 20.0,
@@ -197,9 +197,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 					controller: _controller,
 					physics: AlwaysScrollableScrollPhysics(),
 					children: <Widget>[
-						LoginScreen(),
+						LoginScreen(controller: _controller),
 						HomePage(),
-						SignUpPage()
+						SignUpPage(controller: _controller)
 					],
 					scrollDirection: Axis.horizontal,
 				),

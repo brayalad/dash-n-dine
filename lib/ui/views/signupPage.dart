@@ -1,13 +1,53 @@
+import 'package:dash_n_dine/core/auth/Auth.dart';
+import 'package:dash_n_dine/core/auth/BasicAuth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../shared/theme.dart';
 
 class SignUpPage extends StatefulWidget {
+	final PageController controller;
+
+	SignUpPage({this.controller});
+
 	@override
-	_SignUpPageState createState() => _SignUpPageState();
+	_SignUpPageState createState() => _SignUpPageState(controller: controller);
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+	final Auth auth = BasicAuth();
+	final PageController controller;
+
+	TextEditingController _firstNameInputController;
+	TextEditingController _lastNameInputController;
+	TextEditingController _userNameInputController;
+	TextEditingController _emailInputController;
+	TextEditingController _pswdInputController;
+	TextEditingController _pswdConfirmInputController;
+
+	_SignUpPageState({this.controller});
+
+	@override
+	void initState(){
+		_firstNameInputController = TextEditingController();
+		_lastNameInputController = TextEditingController();
+		_userNameInputController = TextEditingController();
+		_emailInputController = TextEditingController();
+		_pswdInputController = TextEditingController();
+		_pswdConfirmInputController = TextEditingController();
+		super.initState();
+	}
+
+	gotoLogin() {
+		controller.animateToPage(
+			0,
+			duration: Duration(milliseconds: 800),
+			curve: Curves.ease,
+		);
+	}
+
+	String getName(){
+		return _firstNameInputController.text + ' ' + _lastNameInputController.text;
+	}
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +74,41 @@ class _SignUpPageState extends State<SignUpPage> {
 		  ),
 	  );
 
+	  final firstName = _UserInputRow(text: 'FIRST NAME');
+	  final firstNameInput = _UserInputContainer(
+		  text: 'James',
+		  controller: _firstNameInputController,
+	  );
+
+	  final lastName = _UserInputRow(text: 'LAST NAME');
+	  final lastNameInput = _UserInputContainer(
+		  text: 'Smith',
+		  controller: _lastNameInputController,
+	  );
+
+	  final username = _UserInputRow(text: 'USERNAME');
+	  final usernameInput = _UserInputContainer(
+		  text: 'username',
+		  controller: _userNameInputController,
+	  );
+
   	final email = _UserInputRow(text: 'EMAIL');
-		final emailInput = _UserInputContainer(text: 'username@email.com');
+		final emailInput = _UserInputContainer(
+				text: 'username@email.com',
+			controller: _emailInputController,
+		);
 
 	  final password = _UserInputRow(text: 'PASSWORD');
-	  final passwordInput = _UserInputContainer(text: '***************');
+	  final passwordInput = _UserInputContainer(
+			  text: '***************',
+		    controller: _pswdInputController,
+	  );
 
 	  final passwordConfirm = _UserInputRow(text: 'CONFIRM PASSWORD');
-	  final passwordConfirmInput = _UserInputContainer(text: '***************');
+	  final passwordConfirmInput = _UserInputContainer(
+			  text: '***************',
+		    controller: _pswdConfirmInputController,
+	  );
 
 	  final alreadyMember = Row(
 		  mainAxisAlignment: MainAxisAlignment.end,
@@ -58,7 +125,7 @@ class _SignUpPageState extends State<SignUpPage> {
 						  ),
 						  textAlign: TextAlign.end,
 					  ),
-					  onPressed: () => {},
+					  onPressed: () => gotoLogin()
 				  ),
 			  ),
 		  ],
@@ -79,8 +146,14 @@ class _SignUpPageState extends State<SignUpPage> {
 								borderRadius: BorderRadius.circular(30.0),
 							),
 							color: Theme.of(context).primaryColor,
-							onPressed: () {
+							onPressed: () async {
+								String user = await auth.signUp(_emailInputController.text, _pswdInputController.text, getName());
 
+								if(user != null){
+									print("Success");
+								} else {
+									print("Fail");
+								}
 							}
 							,
 							child: Container(
@@ -113,10 +186,18 @@ class _SignUpPageState extends State<SignUpPage> {
 
 		return SingleChildScrollView(
 			child: Container(
-				height: MediaQuery.of(context).size.height,
 				child: Column(
 					children: <Widget>[
 						logo,
+						firstName,
+						firstNameInput,
+						divider,
+						lastName,
+						lastNameInput,
+						divider,
+						username,
+						usernameInput,
+						divider,
 						email,
 						emailInput,
 						divider,
@@ -141,8 +222,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
 class _UserInputContainer extends StatelessWidget {
 	final text;
+	final TextEditingController controller;
 
-	_UserInputContainer({this.text});
+	_UserInputContainer({this.text, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +257,7 @@ class _UserInputContainer extends StatelessWidget {
 				    child: TextField(
 					    obscureText: false,
 					    textAlign: TextAlign.left,
+					    controller: controller,
 					    decoration: InputDecoration(
 						    border: InputBorder.none,
 						    hintText: text,

@@ -41,13 +41,13 @@ class ProfilePage extends StatefulWidget {
 
 
 class _ProfilePageState extends State<ProfilePage> {
-	final profileImage;
-	final userName;
-	final fullName;
-	final email;
-	final address;
-	final phoneNumber;
-	final dateOfBirth;
+	final AssetImage profileImage;
+	final String userName;
+	final String fullName;
+	final String email;
+	final String address;
+	final String phoneNumber;
+	final String dateOfBirth;
 
 
 	_ProfilePageState({

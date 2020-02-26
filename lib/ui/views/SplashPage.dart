@@ -1,7 +1,6 @@
+import 'package:dash_n_dine/core/auth/Auth.dart';
+import 'package:dash_n_dine/core/auth/BasicAuth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import './HomePage.dart';
 
 
 class SplashPage extends StatefulWidget {
@@ -13,15 +12,19 @@ class SplashPage extends StatefulWidget {
 
 
 class _SplashPageState extends State<SplashPage> {
+	Auth auth = BasicAuth();
 
 	@override
-	void initState() async {
-		FirebaseUser user = await FirebaseAuth.instance.currentUser();
-		if(user == null){
-			Navigator.pushReplacementNamed(context, '/homePage');
-		} else {
-			Navigator.pushReplacementNamed(context, '/mainPage');
-		}
+	void initState() {
+		auth.getCurrentUser()
+				.then((user) => {
+					if(user == null){
+						Navigator.pushReplacementNamed(context, '/homePage')
+					} else {
+						Navigator.pushReplacementNamed(context, '/homePage')
+					}
+				})
+		.catchError((error) => print(error));
 		super.initState();
 	}
 

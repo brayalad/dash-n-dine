@@ -29,7 +29,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 		}
 
 		if(page == 3){
-			return ProfilePage();
+			return ProfilePage(
+				profileImage: AssetImage('assets/profilepic.jpeg'),
+				userName: 'Brayalad',
+				fullName: 'Bryan Ayala',
+				email: 'blayala@cpp.edu',
+				address: '1234 Lane St.',
+				dateOfBirth: '7/29/1998',
+			);
 		}
 	}
 
