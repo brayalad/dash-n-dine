@@ -1,8 +1,11 @@
 import 'package:dash_n_dine/core/auth/Auth.dart';
 import 'package:dash_n_dine/core/auth/BasicAuth.dart';
+import 'package:dash_n_dine/core/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../shared/theme.dart';
+
+const String DEFAULT_IMAGE_PATH = 'gs://dash-n-dine.appspot.com/profilepic.jpeg';
 
 class SignUpPage extends StatefulWidget {
 	final PageController controller;
@@ -14,7 +17,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-	final Auth auth = BasicAuth();
+	final Auth _auth = BasicAuth();
 	final PageController controller;
 
 	TextEditingController _firstNameInputController;
@@ -102,12 +105,14 @@ class _SignUpPageState extends State<SignUpPage> {
 	  final passwordInput = _UserInputContainer(
 			  text: '***************',
 		    controller: _pswdInputController,
+		    isSecret: true,
 	  );
 
 	  final passwordConfirm = _UserInputRow(text: 'CONFIRM PASSWORD');
 	  final passwordConfirmInput = _UserInputContainer(
-			  text: '***************',
-		    controller: _pswdConfirmInputController,
+		  text: '***************',
+		  controller: _pswdConfirmInputController,
+		  isSecret: true
 	  );
 
 	  final alreadyMember = Row(
@@ -147,13 +152,19 @@ class _SignUpPageState extends State<SignUpPage> {
 							),
 							color: Theme.of(context).primaryColor,
 							onPressed: () async {
-								String user = await auth.signUp(_emailInputController.text, _pswdInputController.text, getName());
-
-								if(user != null){
-									print("Success");
-								} else {
-									print("Fail");
-								}
+								User user = User(
+									userId: 'tempID',
+									email: _emailInputController.text,
+									username: _userNameInputController.text,
+									firstName: _firstNameInputController.text,
+									lastName: _lastNameInputController.text,
+									photoUrl: DEFAULT_IMAGE_PATH
+								);
+								
+								String userId = await _auth.signUpUser(user, _pswdInputController.text);
+								
+								print(userId != null ? "SUCESS" : "FAIL");
+								
 							}
 							,
 							child: Container(
@@ -222,9 +233,11 @@ class _SignUpPageState extends State<SignUpPage> {
 
 class _UserInputContainer extends StatelessWidget {
 	final text;
+	final bool isSecret;
 	final TextEditingController controller;
 
-	_UserInputContainer({this.text, this.controller});
+
+	_UserInputContainer({this.text, this.isSecret, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +268,7 @@ class _UserInputContainer extends StatelessWidget {
 		    children: <Widget>[
 		    	Expanded(
 				    child: TextField(
-					    obscureText: false,
+					    obscureText: isSecret != null ? isSecret : false,
 					    textAlign: TextAlign.left,
 					    controller: controller,
 					    decoration: InputDecoration(

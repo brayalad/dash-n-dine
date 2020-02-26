@@ -28,6 +28,8 @@ dependencies:
   cloud_functions: ^0.4.2
   firebase_storage: ^3.1.1
   firebase_database: ^3.1.1
+  firebase_messaging: ^6.0.9
+  firebase: ^7.2.1
   #firebase_in_app_messaging: ^0.1.1+1
   #firebase_remote_config: ^0.3.0+1
 

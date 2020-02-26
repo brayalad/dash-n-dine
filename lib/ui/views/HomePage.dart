@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './signupPage.dart';
-import './loginScreen.dart';
+import './SignupPage.dart';
+import './LoginScreen.dart';
 
 
 class HomePage extends StatefulWidget {

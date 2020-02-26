@@ -2,8 +2,8 @@ import 'package:dash_n_dine/ui/views/HomePage.dart';
 import 'package:dash_n_dine/ui/views/MainPage.dart';
 import 'package:dash_n_dine/ui/views/ProfilePage.dart';
 import 'package:dash_n_dine/ui/views/SplashPage.dart';
-import 'package:dash_n_dine/ui/views/loginScreen.dart';
-import 'package:dash_n_dine/ui/views/signupPage.dart';
+import 'package:dash_n_dine/ui/views/LoginScreen.dart';
+import 'package:dash_n_dine/ui/views/SignupPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
