@@ -1,3 +1,4 @@
+import 'package:dash_n_dine/core/model/User.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -7,34 +8,19 @@ import '../shared/text_styles.dart' as style;
 
 class ProfilePage extends StatefulWidget {
 	final profileImage;
-	final userName;
-	final fullName;
-	final email;
-	final address;
-	final phoneNumber;
-	final dateOfBirth;
+	final user;
 
 
 	ProfilePage({
 		this.profileImage,
-		this.userName,
-		this.fullName,
-		this.email,
-		this.address,
-		this.phoneNumber,
-		this.dateOfBirth
+		this.user
 	});
 
 	@override
 	_ProfilePageState createState(){
 		return _ProfilePageState(
 			profileImage: profileImage,
-			userName: userName,
-			fullName: fullName,
-			email: email,
-			address: address,
-			phoneNumber: phoneNumber,
-			dateOfBirth: dateOfBirth
+			user: user
 		);
 	}
 }
@@ -42,22 +28,12 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 	final AssetImage profileImage;
-	final String userName;
-	final String fullName;
-	final String email;
-	final String address;
-	final String phoneNumber;
-	final String dateOfBirth;
+	final User user;
 
 
 	_ProfilePageState({
 		this.profileImage,
-		this.userName,
-		this.fullName,
-		this.email,
-		this.address,
-		this.phoneNumber,
-		this.dateOfBirth
+		this.user
 	});
 
 
@@ -111,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
 			child: Column(
 				children: <Widget>[
 					Text(
-						userName,
+						user.username,
 						style: style.headerStyle3,
 					),
 					SizedBox(
@@ -123,33 +99,37 @@ class _ProfilePageState extends State<ProfilePage> {
 
 		final _emailContainer = _InfoContainer(
 			title: 'Email',
-			value: email,
+			value: user.email,
 		);
 
 		final _phoneContainer = _InfoContainer(
 			title: 'Phone',
-			value: phoneNumber,
+			value: user.phoneNumber,
 		);
 
 		final _fullNameInkWell = _InfoInkWell(
 			title: 'Name',
-			value: fullName,
+			value: user.firstName + ' ' + user.lastName,
 		);
 
 		final _addressInkWell = _InfoInkWell(
 			title: 'Address',
-			value: address,
+			value: user.address,
 		);
 
 		final _birthDateInkWell = _InfoInkWell(
 			title: 'Date of Birth',
-			value: dateOfBirth,
+			value: user.dateOfBirth,
 		);
 
-		final _themeToggler = GestureDetector(
+		final _themeToggle = GestureDetector(
 			onTap: (){
 				_theme.toggleTheme();
-			}
+			},
+			child: Container(
+				width: 90.0,
+				height: 45.0,
+			),
 		);
 
 		return Scaffold(
@@ -163,6 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
 								children: <Widget>[
 									_backGround,
 									Container(
+										alignment: Alignment.center,
 										child: Column(
 											children: <Widget>[
 												_profileImageContainer,
@@ -176,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
 													child: Row(
 														mainAxisAlignment: MainAxisAlignment.spaceAround,
 														children: <Widget>[
-															_themeToggler,
+															_themeToggle,
 															Container(
 																child: Column(
 																	children: <Widget>[
@@ -262,7 +243,7 @@ class _InfoInkWell extends StatelessWidget {
 									style: style.headerStyle3,
 								),
 								Text(
-									value,
+									value != null ? value : '',
 									style: style.subHintTitle,
 								)
 							],
@@ -303,7 +284,7 @@ class _InfoContainer extends StatelessWidget {
 						height: 5,
 					),
 					Text(
-						value,
+						value == null ? '' : value,
 						style: TextStyle(
 								fontSize: 15.0
 						),

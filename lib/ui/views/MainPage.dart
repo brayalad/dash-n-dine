@@ -1,5 +1,8 @@
 
+import 'package:dash_n_dine/core/auth/BasicAuth.dart';
+import 'package:dash_n_dine/core/model/User.dart';
 import 'package:dash_n_dine/ui/views/HomePage.dart';
+import 'package:dash_n_dine/ui/views/LandingPage.dart';
 import 'package:flutter/material.dart';
 
 import 'ProfilePage.dart';
@@ -12,30 +15,30 @@ class MainPage extends StatefulWidget {
 
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
+	var _auth = BasicAuth();
 	int _selectedIndex = 0;
+	User currentUser;
 
 
 	@override
 	void initState(){
+		_auth.getCurrentUser().then((user) => currentUser = user);
 		super.initState();
 	}
 
 	Widget _getPage(page){
 		if(page == 0){
-			return HomePage();
+			return LandingPage();
 		}
 		if(page == 1){
 			return SearchPage();
 		}
 
 		if(page == 3){
+			print(currentUser.toMap().toString());
 			return ProfilePage(
 				profileImage: AssetImage('assets/profilepic.jpeg'),
-				userName: 'Brayalad',
-				fullName: 'Bryan Ayala',
-				email: 'blayala@cpp.edu',
-				address: '1234 Lane St.',
-				dateOfBirth: '7/29/1998',
+				user: currentUser,
 			);
 		}
 	}

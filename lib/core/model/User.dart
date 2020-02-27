@@ -1,18 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class User {
-	String userId;
-	String username;
-	String email;
-	String firstName;
-	String lastName;
-	String photoUrl;
-	String phoneNumber;
-	String address;
-	String dateOfBirth;
+	var id;
+	var username;
+	var email;
+	var firstName;
+	var lastName;
+	var photoUrl;
+	var phoneNumber;
+	var address;
+	var dateOfBirth;
 
 	User({
-		@required this.userId,
+		@required this.id,
 		@required this.username,
 		@required this.email,
 		@required this.firstName,
@@ -23,10 +24,23 @@ class User {
 		this.dateOfBirth
 	});
 
+	static User fromMap(Map<String, dynamic> map){
+		return User(
+			id: map['id'],
+			username: map['username'],
+			email: map['email'],
+			firstName: map['firstName'],
+			lastName: map['lastName'],
+			photoUrl: map['photoUrl'],
+			phoneNumber: map['phoneNumber'],
+			address: map['address'],
+			dateOfBirth: map['dateOfBirth']
+		);
+	}
 
 	Map<String, dynamic> toMap(){
 		return {
-			'userId': userId,
+			'id': id,
 			'username': username,
 			'email': email,
 			'firstName': firstName,

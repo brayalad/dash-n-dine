@@ -153,7 +153,7 @@ class _SignUpPageState extends State<SignUpPage> {
 							color: Theme.of(context).primaryColor,
 							onPressed: () async {
 								User user = User(
-									userId: 'tempID',
+									id: 'tempID',
 									email: _emailInputController.text,
 									username: _userNameInputController.text,
 									firstName: _firstNameInputController.text,
@@ -161,7 +161,7 @@ class _SignUpPageState extends State<SignUpPage> {
 									photoUrl: DEFAULT_IMAGE_PATH
 								);
 								
-								String userId = await _auth.signUpUser(user, _pswdInputController.text);
+								var userId = await _auth.signUpUser(user, _pswdInputController.text);
 								
 								print(userId != null ? "SUCESS" : "FAIL");
 								

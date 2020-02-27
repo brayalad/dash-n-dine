@@ -169,6 +169,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                 _UserInputContainer(
                     hintText: '*********',
                     controller: _pswdInputController,
+                    isSecret: true,
                 ),
                 _divider,
                 forgotPassword,
@@ -267,7 +268,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                         });
                         _playAnimation();
 
-                        String user = await auth.signIn(_emailInputController.text, _pswdInputController.text);
+                        var user = await auth.signIn(_emailInputController.text, _pswdInputController.text);
                         if(user != null){
                           print("Success");
                         } else {
@@ -346,9 +347,10 @@ class _UserInputRow extends StatelessWidget {
 class _UserInputContainer extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
+  final bool isSecret;
 
 
-  _UserInputContainer({this.hintText, this.controller});
+  _UserInputContainer({this.hintText, this.controller, this.isSecret});
 
 
   @override
@@ -381,7 +383,7 @@ class _UserInputContainer extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: TextField(
-              obscureText: false,
+              obscureText: isSecret != null ? isSecret : false,
               textAlign: TextAlign.left,
               controller: controller,
               decoration: InputDecoration(

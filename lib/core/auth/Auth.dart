@@ -3,13 +3,17 @@ import 'package:dash_n_dine/core/model/User.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class Auth {
-	Future<String> signIn(String email, String password);
+	Future<FirebaseUser> signIn(String email, String password);
 
-	Future<String> signUpWithEmail(String email, String password, String name);
+	Future<FirebaseUser> signUpWithEmail(String email, String password, String name);
 
-	Future<String> signUpUser(User user, String password);
+	Future<FirebaseUser> signUpUser(User user, String password);
 
-	Future<FirebaseUser> getCurrentUser();
+	Future<FirebaseUser> getCurrentFirebaseUser();
+	
+	Future<User> getCurrentUser();
+
+	User getCurrentUserSync();
 
 	Future<void> sendEmailVerification();
 

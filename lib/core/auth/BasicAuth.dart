@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dash_n_dine/core/db/UsersCollection.dart';
 import 'package:dash_n_dine/core/model/User.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './Auth.dart';
@@ -7,31 +8,21 @@ import './Auth.dart';
 
 class BasicAuth implements Auth {
 	final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-	final CollectionReference _usersCollection = Firestore.instance.collection('users');
+	final UsersCollection _usersCollection = UsersCollection();
 
   @override
-  Future<String> signIn(String email, String password) async {
+  Future<FirebaseUser> signIn(String email, String password) async {
 		AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
 				email: email,
 				password: password
 		);
 		FirebaseUser user = result.user;
 
-		CollectionReference col = Firestore.instance.collection('users');
-
-		QuerySnapshot docs = await col.getDocuments();
-
-		List<DocumentSnapshot> list = await docs.documents;
-		print(list.length);
-		for(var ds in list){
-			await print(ds.data.toString());
-		}
-
-		return user.uid;
+		return user;
   }
 
 	@override
-	Future<String> signUpWithEmail(String email, String password, String name) async {
+	Future<FirebaseUser> signUpWithEmail(String email, String password, String name) async {
 		AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
 				email: email,
 				password: password
@@ -42,11 +33,11 @@ class BasicAuth implements Auth {
 		FirebaseUser user = result.user;
 		user.updateProfile(info);
 
-		return user.uid;
+		return user;
 	}
 
 	@override
-	Future<String> signUpUser(User user, String password) async {
+	Future<FirebaseUser> signUpUser(User user, String password) async {
 		AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
 				email: user.email,
 				password: password
@@ -59,11 +50,11 @@ class BasicAuth implements Auth {
 		FirebaseUser firebaseUser = result.user;
 		firebaseUser.updateProfile(updateInfo);
 
-		user.userId = firebaseUser.uid;
+		user.id = firebaseUser.uid;
 
-		await _usersCollection.add(user.toMap());
+		_usersCollection.addUser(user);
 
-  	return firebaseUser.uid;
+  	return firebaseUser;
 	}
 
   @override
@@ -72,9 +63,21 @@ class BasicAuth implements Auth {
   }
 
 	@override
-	Future<FirebaseUser> getCurrentUser() async {
+	Future<FirebaseUser> getCurrentFirebaseUser() async {
 		return await _firebaseAuth.currentUser();
 	}
+
+	@override
+	Future<User> getCurrentUser() async {
+  	return (await _usersCollection.getUserByID((await getCurrentFirebaseUser()).uid)).first;
+  }
+
+  @override
+  User getCurrentUserSync(){
+  	User currentUser;
+  	getCurrentUser().then((user) => currentUser = user);
+  	return currentUser;
+  }
 
 	@override
 	Future<bool> isEmailVerified() async {
@@ -87,6 +90,8 @@ class BasicAuth implements Auth {
 		FirebaseUser user = await _firebaseAuth.currentUser();
 		user.sendEmailVerification();
 	}
+
+
 
 }
 

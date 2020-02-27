@@ -16,15 +16,17 @@ class _SplashPageState extends State<SplashPage> {
 
 	@override
 	void initState() {
-		auth.getCurrentUser()
-				.then((user) => {
-					if(user == null){
-						Navigator.pushReplacementNamed(context, '/homePage')
-					} else {
-						Navigator.pushReplacementNamed(context, '/homePage')
-					}
-				})
-		.catchError((error) => print(error));
+		//auth.signOut().then((value) {
+			auth.getCurrentFirebaseUser()
+					.then((user) {
+				if (user == null) {
+					Navigator.pushReplacementNamed(context, '/homePage');
+				} else {
+					Navigator.pushReplacementNamed(context, '/mainPage');
+				}
+			})
+					.catchError((error) => print(error));
+		//});
 		super.initState();
 	}
 
