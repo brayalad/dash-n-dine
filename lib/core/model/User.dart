@@ -24,6 +24,38 @@ class User {
 		this.dateOfBirth
 	});
 
+	getID(){return id; }
+
+	getUsername(){ return username; }
+
+	setUsername(username){
+		this.username = username;
+	}
+
+	getEmail(){ return email; }
+
+	setEmail(username){
+		this.username = username;
+	}
+
+	getPhoneNumber(){ return phoneNumber; }
+
+	setPhoneNumber(phoneNumber){
+		this.phoneNumber = phoneNumber;
+	}
+
+	getAddress(){ return address; }
+
+	setAddress(address){
+		this.address = address;
+	}
+
+	getDateOfBirth(){ return dateOfBirth; }
+
+	setDateOfBirth(dateOfBirth){
+		this.dateOfBirth = dateOfBirth;
+	}
+
 	static User fromMap(Map<String, dynamic> map){
 		return User(
 			id: map['id'],

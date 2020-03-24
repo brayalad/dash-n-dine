@@ -31,4 +31,10 @@ class UsersCollection {
 		return users;
 	}
 
+	Future<void> updateUser(User updated) async {
+		DocumentReference document = _usersCollection.document(updated.getID());
+		document.updateData(updated.toMap());
+
+	}
+
 }

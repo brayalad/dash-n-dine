@@ -24,6 +24,12 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow user to upload pictures</string>
+    <key>NSCameraUsageDescription</key>
+	<string>Allow user to take picture to upload</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Allow user to record video to upload</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>

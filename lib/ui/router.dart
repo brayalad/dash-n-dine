@@ -4,6 +4,7 @@ import 'package:dash_n_dine/ui/views/ProfilePage.dart';
 import 'package:dash_n_dine/ui/views/SplashPage.dart';
 import 'package:dash_n_dine/ui/views/LoginScreen.dart';
 import 'package:dash_n_dine/ui/views/SignupPage.dart';
+import 'package:dash_n_dine/ui/widgets/ImageCapture.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -27,6 +28,8 @@ class Router {
 				return MaterialPageRoute(builder: (_) => MainPage());
 			case '/splashPage':
 				return MaterialPageRoute(builder: (_) => SplashPage());
+			case '/imageCapture':
+				return MaterialPageRoute(builder: (_) => ImageCapture());
 			default:
 				return MaterialPageRoute(
 					builder: (_) => Scaffold(

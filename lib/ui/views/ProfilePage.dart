@@ -1,4 +1,5 @@
 import 'package:dash_n_dine/core/model/User.dart';
+import 'package:dash_n_dine/ui/widgets/FileDownloader.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -19,7 +20,6 @@ class ProfilePage extends StatefulWidget {
 	@override
 	_ProfilePageState createState(){
 		return _ProfilePageState(
-			profileImage: profileImage,
 			user: user
 		);
 	}
@@ -27,12 +27,15 @@ class ProfilePage extends StatefulWidget {
 
 
 class _ProfilePageState extends State<ProfilePage> {
-	final AssetImage profileImage;
+	FileDownloader _downloader = FileDownloader();
+
+
 	final User user;
+	ImageProvider profileImage;
+	
 
 
 	_ProfilePageState({
-		this.profileImage,
 		this.user
 	});
 
@@ -41,97 +44,21 @@ class _ProfilePageState extends State<ProfilePage> {
 	@override
 	void initState(){
 		super.initState();
+		_downloader.getProfileImageURL(this.user).then((url) {
+			setState(() {
+			  profileImage = NetworkImage(url);
+			});
+		});
 	}
 
 
-  @override
-  Widget build(BuildContext context) {
-		final _theme = Provider.of<ThemeDelegate>(context);
+	@override
+	Widget build(BuildContext context) {
+		if(profileImage == null){
+			return new Container();
+		}
 
-		final _backGround = Container(
-				child: Column(
-					children: <Widget>[
-						Container(
-							height: MediaQuery.of(context).size.height * 0.45,
-							color: Colors.transparent,
-							child: ClipPath(
-								clipper: BackClipper(),
-								child: Container(
-									color: Theme.of(context).primaryColor,
-								),
-							),
-						)
-					],
-				)
-		);
-
-		final _profileImageContainer = Container(
-			child: Center(
-				child: Container(
-					height: 90.0,
-					width: 90.0,
-					padding: EdgeInsets.all(10.0),
-					decoration: BoxDecoration(
-						color: Theme.of(context).scaffoldBackgroundColor,
-						borderRadius: BorderRadius.circular(100.0)
-					),
-					child: CircleAvatar(
-						backgroundColor: Colors.white,
-						backgroundImage: profileImage,
-					),
-				),
-			),
-		);
-
-		final _userContainer = Container(
-			child: Column(
-				children: <Widget>[
-					Text(
-						user.username,
-						style: style.headerStyle3,
-					),
-					SizedBox(
-						height: 10.0,
-					)
-				],
-			),
-		);
-
-		final _emailContainer = _InfoContainer(
-			title: 'Email',
-			value: user.email,
-		);
-
-		final _phoneContainer = _InfoContainer(
-			title: 'Phone',
-			value: user.phoneNumber,
-		);
-
-		final _fullNameInkWell = _InfoInkWell(
-			title: 'Name',
-			value: user.firstName + ' ' + user.lastName,
-		);
-
-		final _addressInkWell = _InfoInkWell(
-			title: 'Address',
-			value: user.address,
-		);
-
-		final _birthDateInkWell = _InfoInkWell(
-			title: 'Date of Birth',
-			value: user.dateOfBirth,
-		);
-
-		final _themeToggle = GestureDetector(
-			onTap: (){
-				_theme.toggleTheme();
-			},
-			child: Container(
-				width: 90.0,
-				height: 45.0,
-			),
-		);
-
+		final theme = Provider.of<ThemeDelegate>(context);
 		return Scaffold(
 			body: SingleChildScrollView(
 				physics: BouncingScrollPhysics(),
@@ -141,30 +68,104 @@ class _ProfilePageState extends State<ProfilePage> {
 						Container(
 							child: Stack(
 								children: <Widget>[
-									_backGround,
+									//background
 									Container(
-										alignment: Alignment.center,
 										child: Column(
 											children: <Widget>[
-												_profileImageContainer,
+												Container(
+													height: MediaQuery.of(context).size.height * 0.45,
+													color: Colors.transparent,
+													child: ClipPath(
+														clipper: BackClipper(),
+														child: Container(
+															color: Theme.of(context).primaryColor,
+														),
+													),
+												),
+											],
+										),
+									),
+									//forground
+									Container(
+										child: Column(
+											children: <Widget>[
+												Container(
+													child: Center(
+														child: Container(
+															height: 90.0,
+															width: 90.0,
+															padding: EdgeInsets.all(10.0),
+															decoration: BoxDecoration(
+																	color: Theme.of(context).scaffoldBackgroundColor,
+																	borderRadius: BorderRadius.circular(100.0)
+															),
+															child: InkWell(
+																child: CircleAvatar(
+																	backgroundColor: Colors.white,
+																	backgroundImage: profileImage,
+																),
+																onTap: () {
+																	Navigator.pushReplacementNamed(
+																			context, '/imageCapture'
+																	);
+																},
+															),
+														),
+													),
+												),
 												SizedBox(
 													height: 5.0,
 												),
 												Container(
-													padding: EdgeInsets.symmetric(
-														horizontal: 15.0
-													),
+													padding: EdgeInsets.symmetric(horizontal: 15.0),
 													child: Row(
 														mainAxisAlignment: MainAxisAlignment.spaceAround,
 														children: <Widget>[
-															_themeToggle,
+															InkWell(
+																onTap: () {
+																	theme.toggleTheme();
+																},
+																child: Container(
+																	width: 90.0,
+																	height: 45.0,
+																	child: Center(
+																		child: Icon(
+																			Icons.lightbulb_outline,
+																			size: 35,
+																		),
+																	),
+																),
+															),
 															Container(
 																child: Column(
 																	children: <Widget>[
-																		_userContainer
+																		Text(
+																			user.username ?? '',
+																			style: style.headerStyle3,
+																		),
+																		SizedBox(
+																			height: 10.0,
+																		),
 																	],
 																),
-															)
+															),
+															InkWell(
+																onTap: () {
+																	Navigator.pushReplacementNamed(
+																			context, '/splashScreen'
+																	);
+																},
+																child: Container(
+																	width: 90.0,
+																	height: 45.0,
+																	child: Center(
+																		child: Icon(
+																			Icons.settings,
+																			size: 35,
+																		),
+																	),
+																),
+															),
 														],
 													),
 												),
@@ -172,32 +173,191 @@ class _ProfilePageState extends State<ProfilePage> {
 													height: 10.0,
 												),
 												Container(
-													padding: EdgeInsets.symmetric(
-														horizontal: 20.0
-													),
+													padding: EdgeInsets.symmetric(horizontal: 20.0),
 													child: Row(
 														mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 														children: <Widget>[
-															_emailContainer,
+															Container(
+																width: MediaQuery.of(context).size.width * 0.45,
+																child: Column(
+																	mainAxisAlignment: MainAxisAlignment.center,
+																	children: <Widget>[
+																		Text(
+																				'Email',
+																				style: style.headerStyle3.copyWith(
+																						fontWeight: FontWeight.w500
+																				),
+																				textAlign: TextAlign.center
+																		),
+																		SizedBox(
+																			height: 5,
+																		),
+																		Text(
+																				user.email ?? '',
+																				style: TextStyle(
+																					fontSize: 15.0,
+																				),
+																				textAlign: TextAlign.center
+																		),
+																	],
+																),
+															),
 															Container(
 																color: Colors.white.withOpacity(0.5),
 																width: 1.0,
 																height: 40.0,
 															),
-															_phoneContainer
+															Container(
+																width: MediaQuery.of(context).size.width * 0.45,
+																child: Column(
+																	children: <Widget>[
+																		Text(
+																				'Phone',
+																				style: style.headerStyle3.copyWith(
+																						fontWeight: FontWeight.w500
+																				),
+																				textAlign: TextAlign.center
+																		),
+																		SizedBox(
+																			height: 5,
+																		),
+																		Text(
+																			user.phoneNumber ?? '',
+																			style: TextStyle(
+																				fontSize: 15.0,
+																			),
+																			textAlign: TextAlign.center,
+																		),
+																	],
+																),
+															),
 														],
 													),
 												),
 												SizedBox(
 													height: 15.0,
 												),
+												GridView.count(
+													crossAxisCount: 2,
+													primary: false,
+													crossAxisSpacing: 2.0,
+													mainAxisSpacing: 4.0,
+													shrinkWrap: true,
+													childAspectRatio: 2.0,
+													children: <Widget>[
+														_buildCard('Reward points', '155', Icons.card_giftcard, 1),
+														_buildCard('Favorites', '5', Icons.favorite, 2),
+													],
+												),
+												SizedBox(
+													height: 50.0,
+												),
 												ListView(
 													physics: NeverScrollableScrollPhysics(),
 													shrinkWrap: true,
 													children: <Widget>[
-														_fullNameInkWell,
-														_addressInkWell,
-														_birthDateInkWell
+														InkWell(
+															onTap: () {},
+															child: Container(
+																padding: EdgeInsets.symmetric(horizontal: 25),
+																height: MediaQuery.of(context).size.height * 0.08,
+																width: MediaQuery.of(context).size.width,
+																child: Row(
+																	mainAxisAlignment:
+																	MainAxisAlignment.spaceBetween,
+																	children: <Widget>[
+																		Column(
+																			crossAxisAlignment:
+																			CrossAxisAlignment.start,
+																			children: <Widget>[
+																				Text(
+																					'Full Name',
+																					style: style.headerStyle3,
+																				),
+																				Text(
+																					'${user.firstName} ${user.lastName}',
+																					style: style.subHintTitle,
+																				)
+																			],
+																		),
+																		IconButton(
+																			icon: Icon(Icons.edit),
+																			onPressed: (){
+
+																			},
+																		)
+																	],
+																),
+															),
+														),
+														InkWell(
+															onTap: () {},
+															child: Container(
+																padding: EdgeInsets.symmetric(horizontal: 25),
+																height: MediaQuery.of(context).size.height * 0.08,
+																width: MediaQuery.of(context).size.width,
+																child: Row(
+																	mainAxisAlignment:
+																	MainAxisAlignment.spaceBetween,
+																	children: <Widget>[
+																		Column(
+																			crossAxisAlignment:
+																			CrossAxisAlignment.start,
+																			children: <Widget>[
+																				Text(
+																					'Address',
+																					style: style.headerStyle3,
+																				),
+																				Text(
+																					user.address ?? '',
+																					style: style.subHintTitle,
+																				)
+																			],
+																		),
+																		IconButton(
+																			icon: Icon(Icons.edit),
+																			onPressed: (){
+
+																			},
+																		)
+																	],
+																),
+															),
+														),
+														InkWell(
+															onTap: () {},
+															child: Container(
+																padding: EdgeInsets.symmetric(horizontal: 25),
+																height: MediaQuery.of(context).size.height * 0.08,
+																width: MediaQuery.of(context).size.width,
+																child: Row(
+																	mainAxisAlignment:
+																	MainAxisAlignment.spaceBetween,
+																	children: <Widget>[
+																		Column(
+																			crossAxisAlignment:
+																			CrossAxisAlignment.start,
+																			children: <Widget>[
+																				Text(
+																					'Date of Birth',
+																					style: style.headerStyle3,
+																				),
+																				Text(
+																					user.dateOfBirth ?? '',
+																					style: style.subHintTitle,
+																				)
+																			],
+																		),
+																		IconButton(
+																			icon: Icon(Icons.edit),
+																			onPressed: (){
+
+																			},
+																		)
+																	],
+																),
+															),
+														)
 													],
 												)
 											],
@@ -205,12 +365,71 @@ class _ProfilePageState extends State<ProfilePage> {
 									)
 								],
 							),
-						)
+						),
 					],
 				),
 			),
 		);
-  }
+	}
+
+
+	Widget _buildCard(String title, String value, icon, int cardIndex) {
+		return Container(
+				decoration: BoxDecoration(
+						color: Theme.of(context).cardColor,
+						borderRadius: BorderRadius.circular(15.0),
+						boxShadow: [
+							BoxShadow(
+									spreadRadius: 1.0, blurRadius: 5.0, color: Colors.black38
+							)
+						]
+				),
+				child: Column(
+					children: <Widget>[
+						SizedBox(
+								height: 15.0
+						),
+						Container(
+							padding: EdgeInsets.symmetric(horizontal: 10.0),
+							child: Row(
+								mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+								children: <Widget>[
+									Text(
+										title,
+										style: TextStyle(
+											fontSize: MediaQuery.of(context).size.width * 0.045,
+										),
+									),
+									Icon(icon)
+								],
+							),
+						),
+						Expanded(
+								child: Container(
+										width: 175.0,
+										decoration: BoxDecoration(
+											borderRadius: BorderRadius.only(
+													bottomLeft: Radius.circular(10.0),
+													bottomRight: Radius.circular(10.0)
+											),
+										),
+										child: Center(
+											child: Text(
+												value,
+												style: TextStyle(
+														fontSize: 25.0,
+														color: Theme.of(context).primaryColor
+												),
+											),
+										)
+								)
+						)
+					],
+				),
+				margin: cardIndex.isEven
+						? EdgeInsets.fromLTRB(10.0, 0.0, 25.0, 10.0)
+						: EdgeInsets.fromLTRB(25.0, 0.0, 5.0, 10.0));
+	}
 
 }
 

@@ -3,6 +3,7 @@ import 'package:dash_n_dine/core/auth/BasicAuth.dart';
 import 'package:dash_n_dine/core/model/User.dart';
 import 'package:dash_n_dine/ui/views/HomePage.dart';
 import 'package:dash_n_dine/ui/views/LandingPage.dart';
+import 'package:dash_n_dine/ui/widgets/TopAppBar.dart';
 import 'package:flutter/material.dart';
 
 import 'ProfilePage.dart';
@@ -35,9 +36,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 		}
 
 		if(page == 3){
-			print(currentUser.toMap().toString());
 			return ProfilePage(
-				profileImage: AssetImage('assets/profilepic.jpeg'),
 				user: currentUser,
 			);
 		}
@@ -53,6 +52,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 	Widget build(BuildContext context) {
 		return Scaffold(
 			body: _getPage(_selectedIndex),
+			appBar: TopAppBar(),
 			bottomNavigationBar: BottomNavigationBar(
 				selectedItemColor: Theme.of(context).hintColor,
 				unselectedItemColor: Theme.of(context).primaryColor,

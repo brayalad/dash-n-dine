@@ -2,10 +2,12 @@ import 'package:dash_n_dine/core/auth/Auth.dart';
 import 'package:dash_n_dine/core/auth/BasicAuth.dart';
 import 'package:dash_n_dine/core/model/User.dart';
 import 'package:flutter/material.dart';
+import 'package:sprintf/sprintf.dart';
 import 'package:provider/provider.dart';
 import '../shared/theme.dart';
 
 const String DEFAULT_IMAGE_PATH = 'gs://dash-n-dine.appspot.com/profilepic.jpeg';
+const String PROFILE_PIC_PATH_FORMAT = '%s_profile_pic.jpeg';
 
 class SignUpPage extends StatefulWidget {
 	final PageController controller;
@@ -158,7 +160,7 @@ class _SignUpPageState extends State<SignUpPage> {
 									username: _userNameInputController.text,
 									firstName: _firstNameInputController.text,
 									lastName: _lastNameInputController.text,
-									photoUrl: DEFAULT_IMAGE_PATH
+									photoUrl: sprintf(PROFILE_PIC_PATH_FORMAT, _userNameInputController.text)
 								);
 								
 								var userId = await _auth.signUpUser(user, _pswdInputController.text);
