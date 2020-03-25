@@ -55,9 +55,9 @@ class _FileUploaderState extends State<FileUploader> {
 				    		FlatButton(
 							    child: Icon(Icons.cloud_done),
 							    onPressed: () {
-								    Navigator.pushReplacementNamed(
-										    context, '/mainPage'
-								    );
+								    Navigator.pop(context, () {
+								    	setState(() {});
+								    });
 							    },
 						    ),
 

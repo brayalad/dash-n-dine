@@ -1,205 +1,319 @@
+import 'package:dash_n_dine/core/auth/BasicAuth.dart';
+import 'package:dash_n_dine/core/db/UsersCollection.dart';
+import 'package:dash_n_dine/core/model/User.dart';
+import 'package:dash_n_dine/ui/shared/theme.dart';
+import 'package:dash_n_dine/ui/widgets/FileDownloader.dart';
+import 'package:dash_n_dine/ui/widgets/TitleAppBar.dart';
+import 'package:dash_n_dine/ui/widgets/UpdateInfoTextFieldDialog.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import '../shared/text_styles.dart' as style;
 
-
-class SettingsOnePage extends StatefulWidget {
-	static final String path = "lib/src/pages/settings/settings1.dart";
+class SettingsPage extends StatefulWidget {
 
 	@override
-	_SettingsOnePageState createState() => _SettingsOnePageState();
+	_SettingsPageState createState() => _SettingsPageState();
+
 }
 
-class _SettingsOnePageState extends State<SettingsOnePage> {
+class _SettingsPageState extends State<SettingsPage> {
+	final _users = UsersCollection();
+	final _auth = BasicAuth();
+	final _loader = FileDownloader();
+
+	User user;
+	ImageProvider image;
+
+	bool _notifications = true;
 	bool _dark;
+
 
 	@override
 	void initState() {
 		super.initState();
 		_dark = false;
+		_auth.getCurrentUser().then((res) {
+			setState(() {
+			  user = res;
+			  _loader.getProfileImageURL(this.user).then((url) {
+				  setState(() {
+					  image = NetworkImage(url);
+				  });
+			  });
+			});
+		});
 	}
 
 	Brightness _getBrightness() {
 		return _dark ? Brightness.dark : Brightness.light;
 	}
 
-	@override
-	Widget build(BuildContext context) {
-		return Theme(
-			isMaterialAppTheme: true,
-			data: ThemeData(
-				brightness: _getBrightness(),
-			),
-			child: Scaffold(
-				backgroundColor: _dark ? null : Colors.grey.shade200,
-				appBar: AppBar(
-					elevation: 0,
-					brightness: _getBrightness(),
-					iconTheme: IconThemeData(color: _dark ? Colors.white : Colors.black),
-					backgroundColor: Colors.transparent,
-					title: Text(
-						'Settings',
-						style: TextStyle(color: _dark ? Colors.white : Colors.black),
-					),
-					actions: <Widget>[
-						IconButton(
-							icon: Icon(FontAwesomeIcons.moon),
-							onPressed: () {
-								setState(() {
-									_dark = !_dark;
-								});
-							},
-						)
-					],
-				),
-				body: Stack(
-					fit: StackFit.expand,
-					children: <Widget>[
-						SingleChildScrollView(
-							padding: const EdgeInsets.all(16.0),
-							child: Column(
-								crossAxisAlignment: CrossAxisAlignment.start,
-								children: <Widget>[
-									Card(
-										elevation: 8.0,
-										shape: RoundedRectangleBorder(
-												borderRadius: BorderRadius.circular(10.0)),
-										color: Colors.purple,
-										child: ListTile(
-											onTap: () {
-												//open edit profile
-											},
-											title: Text(
-												"John Doe",
-												style: TextStyle(
-													color: Colors.white,
-													fontWeight: FontWeight.w500,
-												),
-											),
-											leading: CircleAvatar(
-												backgroundImage: CachedNetworkImageProvider(avatars[0]),
-											),
-											trailing: Icon(
-												Icons.edit,
-												color: Colors.white,
-											),
-										),
-									),
-									const SizedBox(height: 10.0),
-									Card(
-										elevation: 4.0,
-										margin: const EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 16.0),
-										shape: RoundedRectangleBorder(
-												borderRadius: BorderRadius.circular(10.0)),
-										child: Column(
-											children: <Widget>[
-												ListTile(
-													leading: Icon(
-														Icons.lock_outline,
-														color: Colors.purple,
-													),
-													title: Text("Change Password"),
-													trailing: Icon(Icons.keyboard_arrow_right),
-													onTap: () {
-														//open change password
-													},
-												),
-												_buildDivider(),
-												ListTile(
-													leading: Icon(
-														FontAwesomeIcons.language,
-														color: Colors.purple,
-													),
-													title: Text("Change Language"),
-													trailing: Icon(Icons.keyboard_arrow_right),
-													onTap: () {
-														//open change language
-													},
-												),
-												_buildDivider(),
-												ListTile(
-													leading: Icon(
-														Icons.location_on,
-														color: Colors.purple,
-													),
-													title: Text("Change Location"),
-													trailing: Icon(Icons.keyboard_arrow_right),
-													onTap: () {
-														//open change location
-													},
-												),
-											],
-										),
-									),
-									const SizedBox(height: 20.0),
-									Text(
-										"Notification Settings",
-										style: TextStyle(
-											fontSize: 20.0,
-											fontWeight: FontWeight.bold,
-											color: Colors.indigo,
-										),
-									),
-									SwitchListTile(
-										activeColor: Colors.purple,
-										contentPadding: const EdgeInsets.all(0),
-										value: true,
-										title: Text("Received notification"),
-										onChanged: (val) {},
-									),
-									SwitchListTile(
-										activeColor: Colors.purple,
-										contentPadding: const EdgeInsets.all(0),
-										value: false,
-										title: Text("Received newsletter"),
-										onChanged: null,
-									),
-									SwitchListTile(
-										activeColor: Colors.purple,
-										contentPadding: const EdgeInsets.all(0),
-										value: true,
-										title: Text("Received Offer Notification"),
-										onChanged: (val) {},
-									),
-									SwitchListTile(
-										activeColor: Colors.purple,
-										contentPadding: const EdgeInsets.all(0),
-										value: true,
-										title: Text("Received App Updates"),
-										onChanged: null,
-									),
-									const SizedBox(height: 60.0),
-								],
-							),
+	Future<String> createInputDialog(BuildContext context, String prompt) async {
+		TextEditingController _textFieldController = TextEditingController();
+
+		return showDialog(
+				context: context,
+				builder: (context) {
+					return AlertDialog(
+						title: Text(prompt),
+						content: TextField(
+							controller: _textFieldController,
+							decoration: InputDecoration(),
 						),
-						Positioned(
-							bottom: -20,
-							left: -20,
-							child: Container(
-								width: 80,
-								height: 80,
-								alignment: Alignment.center,
-								decoration: BoxDecoration(
-									color: Colors.purple,
-									shape: BoxShape.circle,
-								),
-							),
-						),
-						Positioned(
-							bottom: 00,
-							left: 00,
-							child: IconButton(
-								icon: Icon(
-									FontAwesomeIcons.powerOff,
-									color: Colors.white,
-								),
+						actions: <Widget>[
+							FlatButton(
+								child: Text('CANCEL'),
 								onPressed: () {
-									//log out
+									Navigator.of(context).pop();
 								},
 							),
-						)
-					],
+							FlatButton(
+								child: Text('SUBMIT'),
+								onPressed: () {
+									Navigator.of(context).pop(_textFieldController.text.toString());
+								},
+							)
+						],
+					);
+				});
+	}
+
+	@override
+	Widget build(BuildContext context) {
+
+		final theme = Provider.of<ThemeDelegate>(context);
+
+		_dark = theme.getTheme() == theme.darkTheme;
+
+		if(user == null || image == null){
+			return new Container();
+		} else {
+			return Theme(
+				isMaterialAppTheme: true,
+				data: ThemeData(
+					brightness: _getBrightness(),
 				),
-			),
-		);
+				child: Scaffold(
+					backgroundColor: Theme.of(context).backgroundColor,
+					appBar: TitleAppBar(title: 'Settings'),
+					body: Stack(
+						fit: StackFit.expand,
+						children: <Widget>[
+							SingleChildScrollView(
+								padding: const EdgeInsets.all(16.0),
+								child: Column(
+									crossAxisAlignment: CrossAxisAlignment.start,
+									children: <Widget>[
+										Card(
+											elevation: 8.0,
+											shape: RoundedRectangleBorder(
+													borderRadius: BorderRadius.circular(10.0)),
+											color: Theme.of(context).primaryColor,
+											child: ListTile(
+												onTap: () {
+													//open edit profile
+												},
+												title: Text(
+													user.username,
+													style: TextStyle(
+														color: Colors.white,
+														fontWeight: FontWeight.w500,
+													),
+												),
+												leading: InkWell(
+													child: CircleAvatar(
+														backgroundImage: image,
+													),
+													onTap: () {
+														Navigator.pushNamed(context, '/imageCapture');
+													},
+												),
+												trailing: IconButton(
+													icon: Icon(Icons.edit),
+													onPressed: () {
+														createInputDialog(context, 'Enter Username').then((val) {
+															user.setUsername(val);
+															_users.updateUser(user);
+														});
+													},
+												),
+											),
+										),
+										const SizedBox(height: 10.0),
+										Card(
+											elevation: 4.0,
+											margin: const EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 16.0),
+											shape: RoundedRectangleBorder(
+													borderRadius: BorderRadius.circular(10.0)
+											),
+											child: Column(
+												children: <Widget>[
+													ListTile(
+														leading: Icon(
+															Icons.email,
+															color: Theme.of(context).primaryColor,
+														),
+														title: Text("Change Email"),
+														trailing: Icon(Icons.keyboard_arrow_right),
+														onTap: () {
+
+														},
+													),
+													_buildDivider(),
+													ListTile(
+														leading: Icon(
+															Icons.lock_outline,
+															color: Theme.of(context).primaryColor,
+														),
+														title: Text("Change Password"),
+														trailing: Icon(Icons.keyboard_arrow_right),
+														onTap: () {
+															//open change language
+														},
+													),
+													_buildDivider(),
+													ListTile(
+														leading: Icon(
+															Icons.location_on,
+															color: Theme.of(context).primaryColor,
+														),
+														title: Text("Change Location"),
+														trailing: Icon(Icons.keyboard_arrow_right),
+														onTap: () {
+															createInputDialog(context, 'Enter Address')
+																	.then((val) {
+																		user.setAddress(val);
+																		_users.updateUser(user);
+															});
+														},
+													),
+													_buildDivider(),
+													ListTile(
+														leading: Icon(
+															Icons.phone_iphone,
+															color: Theme.of(context).primaryColor,
+														),
+														title: Text("Change Phone Number"),
+														trailing: Icon(Icons.keyboard_arrow_right),
+														onTap: () {
+															createInputDialog(context, 'Enter Phone Number').then((val) {
+																user.setPhoneNumber(val);
+																_users.updateUser(user);
+															});
+														},
+													),
+													_buildDivider(),
+													ListTile(
+														leading: Icon(
+															Icons.calendar_today,
+															color: Theme.of(context).primaryColor,
+														),
+														title: Text("Change Birthday"),
+														trailing: Icon(Icons.keyboard_arrow_right),
+														onTap: () {
+															createInputDialog(context, 'Enter Birthday').then((val) {
+																user.setDateOfBirth(val);
+																_users.updateUser(user);
+															});
+														},
+													),
+												],
+											),
+										), 
+										const SizedBox(height: 20.0),
+										Text(
+											"Settings",
+											style: TextStyle(
+												fontSize: 20.0,
+												fontWeight: FontWeight.bold,
+												color: Theme.of(context).primaryColor,
+											),
+										),
+										SwitchListTile(
+											activeColor: Theme.of(context).primaryColor,
+											contentPadding: const EdgeInsets.all(0),
+											value: _dark,
+											title: Text(
+													"Dark Mode",
+													style: style.headerStyle3
+											),
+											onChanged: (val) {
+												setState(() {
+												  _dark = val;
+												  theme.toggleTheme();
+												});
+											},
+										),
+										SwitchListTile(
+											activeColor: Theme.of(context).primaryColor,
+											contentPadding: const EdgeInsets.all(0),
+											value: _notifications,
+											title: Text(
+													"Notifications",
+													style: style.headerStyle3
+											),
+											onChanged: (val) {
+												setState(() {
+												  _notifications = val;
+												});
+											},
+										),
+										SwitchListTile(
+											activeColor: Theme.of(context).primaryColor,
+											contentPadding: const EdgeInsets.all(0),
+											value: true,
+											title: Text(
+													"Offer Notifications",
+													style: style.headerStyle3
+											),
+											onChanged: null,
+										),
+										SwitchListTile(
+											activeColor: Theme.of(context).primaryColor,
+											contentPadding: const EdgeInsets.all(0),
+											value: true,
+											title: Text(
+													"App Updates",
+													style: style.headerStyle3
+											),
+											onChanged: null,
+										),
+										const SizedBox(height: 60.0),
+									],
+								),
+							),
+							Positioned(
+								bottom: -20,
+								left: -20,
+								child: Container(
+									width: 80,
+									height: 80,
+									alignment: Alignment.center,
+									decoration: BoxDecoration(
+										color: Theme.of(context).primaryColor,
+										shape: BoxShape.circle,
+									),
+								),
+							),
+							Positioned(
+								bottom: 00,
+								left: 00,
+								child: IconButton(
+									icon: Icon(
+										FontAwesomeIcons.powerOff,
+										color: Colors.white,
+									),
+									onPressed: () {
+										//log out
+									},
+								),
+							)
+						],
+					),
+				),
+			);
+		}
 	}
 
 	Container _buildDivider() {

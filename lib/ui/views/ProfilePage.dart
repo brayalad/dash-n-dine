@@ -1,4 +1,6 @@
+import 'package:dash_n_dine/core/auth/BasicAuth.dart';
 import 'package:dash_n_dine/core/model/User.dart';
+import 'package:dash_n_dine/ui/views/SettingsPage.dart';
 import 'package:dash_n_dine/ui/widgets/FileDownloader.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -8,53 +10,41 @@ import 'package:dash_n_dine/ui/shared/theme.dart';
 import '../shared/text_styles.dart' as style;
 
 class ProfilePage extends StatefulWidget {
-	final profileImage;
-	final user;
-
-
-	ProfilePage({
-		this.profileImage,
-		this.user
-	});
-
 	@override
-	_ProfilePageState createState(){
-		return _ProfilePageState(
-			user: user
-		);
-	}
+	_ProfilePageState createState() => _ProfilePageState();
 }
 
 
 class _ProfilePageState extends State<ProfilePage> {
-	FileDownloader _downloader = FileDownloader();
+	final _auth = BasicAuth();
+	final _loader = FileDownloader();
 
-
-	final User user;
-	ImageProvider profileImage;
-	
-
-
-	_ProfilePageState({
-		this.user
-	});
-
+	User user;
+	ImageProvider image;
 
 
 	@override
-	void initState(){
+	void initState() {
 		super.initState();
-		_downloader.getProfileImageURL(this.user).then((url) {
+		_setUserInfo();
+	}
+
+	_setUserInfo(){
+		_auth.getCurrentUser().then((res) {
 			setState(() {
-			  profileImage = NetworkImage(url);
+				user = res;
+				_loader.getProfileImageURL(this.user).then((url) {
+					setState(() {
+						image = NetworkImage(url);
+					});
+				});
 			});
 		});
 	}
 
-
 	@override
 	Widget build(BuildContext context) {
-		if(profileImage == null){
+		if(user == null || image == null){
 			return new Container();
 		}
 
@@ -102,12 +92,10 @@ class _ProfilePageState extends State<ProfilePage> {
 															child: InkWell(
 																child: CircleAvatar(
 																	backgroundColor: Colors.white,
-																	backgroundImage: profileImage,
+																	backgroundImage: image,
 																),
 																onTap: () {
-																	Navigator.pushReplacementNamed(
-																			context, '/imageCapture'
-																	);
+																	Navigator.pushNamed(context, '/imageCapture').then((value) { _setUserInfo(); });
 																},
 															),
 														),
@@ -151,9 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
 															),
 															InkWell(
 																onTap: () {
-																	Navigator.pushReplacementNamed(
-																			context, '/splashScreen'
-																	);
+																	Navigator.pushNamed(context, '/settings').then((val) { _setUserInfo(); });
 																},
 																child: Container(
 																	width: 90.0,
@@ -283,7 +269,7 @@ class _ProfilePageState extends State<ProfilePage> {
 																		IconButton(
 																			icon: Icon(Icons.edit),
 																			onPressed: (){
-
+																				Navigator.pushNamed(context, '/settings').then((val) { _setUserInfo(); });
 																			},
 																		)
 																	],
@@ -317,7 +303,7 @@ class _ProfilePageState extends State<ProfilePage> {
 																		IconButton(
 																			icon: Icon(Icons.edit),
 																			onPressed: (){
-
+																				Navigator.pushNamed(context, '/settings').then((val) { _setUserInfo(); });
 																			},
 																		)
 																	],
@@ -351,7 +337,7 @@ class _ProfilePageState extends State<ProfilePage> {
 																		IconButton(
 																			icon: Icon(Icons.edit),
 																			onPressed: (){
-
+																				Navigator.pushNamed(context, '/settings').then((val) { _setUserInfo(); });
 																			},
 																		)
 																	],

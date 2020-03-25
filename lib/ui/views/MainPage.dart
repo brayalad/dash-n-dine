@@ -36,9 +36,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 		}
 
 		if(page == 3){
-			return ProfilePage(
-				user: currentUser,
-			);
+			return ProfilePage();
 		}
 	}
 

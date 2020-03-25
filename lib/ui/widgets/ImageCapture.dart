@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dash_n_dine/ui/widgets/FileUploader.dart';
+import 'package:dash_n_dine/ui/widgets/TitleAppBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -41,12 +42,13 @@ class _ImageCaptureState extends State<ImageCapture> {
   @override
   Widget build(BuildContext context) {
 		return Scaffold(
+			appBar: TitleAppBar(title: 'Image Capture',),
 			bottomNavigationBar: BottomAppBar(
 				child: Row(
 					children: <Widget>[
 						IconButton(
 							icon: Icon(Icons.home),
-							onPressed: () => Navigator.pushReplacementNamed(context, '/mainPage') ,
+							onPressed: () => Navigator.of(context).pop(),
 						),
 						IconButton(
 							icon: Icon(Icons.photo_camera),
