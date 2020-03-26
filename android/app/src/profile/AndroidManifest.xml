@@ -3,6 +3,12 @@
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
+
+    <application>
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDT_WhpNimuU1248FRe8XDm62Dcj2Ea9zw"/>
+    </application>
+
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 </manifest>

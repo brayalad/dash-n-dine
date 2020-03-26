@@ -30,7 +30,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 	@override
 	void initState(){
 		super.initState();
-		_location.getCurrentLocationAddress().then((value) {print(value);});
 		_setCurrentUser();
 		_setCurrentPosition();
 	}
