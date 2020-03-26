@@ -1,5 +1,6 @@
 import 'package:dash_n_dine/core/auth/BasicAuth.dart';
 import 'package:dash_n_dine/core/db/UsersCollection.dart';
+import 'package:dash_n_dine/core/location/LocationService.dart';
 import 'package:dash_n_dine/core/model/User.dart';
 import 'package:dash_n_dine/ui/shared/theme.dart';
 import 'package:dash_n_dine/ui/widgets/FileDownloader.dart';
@@ -18,6 +19,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+	LocationService _location = LocationService();
+
 	final _users = UsersCollection();
 	final _auth = BasicAuth();
 	final _loader = FileDownloader();
@@ -49,8 +52,31 @@ class _SettingsPageState extends State<SettingsPage> {
 		return _dark ? Brightness.dark : Brightness.light;
 	}
 
-	Future<String> createInputDialog(BuildContext context, String prompt) async {
+	Future<String> createLocationInputDialog(BuildContext context, String prompt) async {
 		TextEditingController _textFieldController = TextEditingController();
+
+		var actions = [
+			FlatButton(
+				child: Text('CANCEL'),
+				onPressed: () {
+					Navigator.of(context).pop();
+				},
+			),
+			FlatButton(
+				child: Text('SUBMIT'),
+				onPressed: () {
+					Navigator.of(context).pop(_textFieldController.text.toString());
+				},
+			),
+			FlatButton(
+				child: Icon(Icons.my_location),
+				onPressed: (){
+					_location.getCurrentLocationAddress().then((value) {
+						Navigator.of(context).pop(value);
+					});
+				},
+			)
+		];
 
 		return showDialog(
 				context: context,
@@ -61,20 +87,39 @@ class _SettingsPageState extends State<SettingsPage> {
 							controller: _textFieldController,
 							decoration: InputDecoration(),
 						),
-						actions: <Widget>[
-							FlatButton(
-								child: Text('CANCEL'),
-								onPressed: () {
-									Navigator.of(context).pop();
-								},
-							),
-							FlatButton(
-								child: Text('SUBMIT'),
-								onPressed: () {
-									Navigator.of(context).pop(_textFieldController.text.toString());
-								},
-							)
-						],
+						actions: actions,
+					);
+				});
+	}
+
+	Future<String> createInputDialog(BuildContext context, String prompt) async {
+		TextEditingController _textFieldController = TextEditingController();
+
+		var actions = [
+			FlatButton(
+				child: Text('CANCEL'),
+				onPressed: () {
+					Navigator.of(context).pop();
+				},
+			),
+			FlatButton(
+				child: Text('SUBMIT'),
+				onPressed: () {
+					Navigator.of(context).pop(_textFieldController.text.toString());
+				},
+			)
+		];
+
+		return showDialog(
+				context: context,
+				builder: (context) {
+					return AlertDialog(
+						title: Text(prompt),
+						content: TextField(
+							controller: _textFieldController,
+							decoration: InputDecoration(),
+						),
+						actions: actions,
 					);
 				});
 	}
@@ -181,7 +226,7 @@ class _SettingsPageState extends State<SettingsPage> {
 														title: Text("Change Location"),
 														trailing: Icon(Icons.keyboard_arrow_right),
 														onTap: () {
-															createInputDialog(context, 'Enter Address')
+															createLocationInputDialog(context, 'Enter Address')
 																	.then((val) {
 																		user.setAddress(val);
 																		_users.updateUser(user);

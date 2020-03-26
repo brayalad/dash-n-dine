@@ -35,6 +35,8 @@ dependencies:
   sprintf: ^4.0.0
   app_settings: 3.0.1
   font_awesome_flutter: ^8.7.0
+  geolocator: ^5.3.0
+  json_annotation: ^3.0.1
 
 
 
