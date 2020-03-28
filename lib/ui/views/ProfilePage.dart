@@ -19,8 +19,8 @@ class _ProfilePageState extends State<ProfilePage> {
 	final _auth = BasicAuth();
 	final _loader = FileDownloader();
 
-	User user;
-	ImageProvider image;
+	User _user;
+	ImageProvider _image;
 
 
 	@override
@@ -29,23 +29,29 @@ class _ProfilePageState extends State<ProfilePage> {
 		_setUserInfo();
 	}
 
+
 	_setUserInfo(){
 		_auth.getCurrentUser().then((res) {
 			setState(() {
-				user = res;
-				_loader.getProfileImageURL(this.user).then((url) {
+				_user = res;
+				_loader.getProfileImageURL(this._user).then((url) {
 					setState(() {
-						image = NetworkImage(url);
+						_image = NetworkImage(url);
 					});
 				});
 			});
 		});
 	}
 
+
 	@override
 	Widget build(BuildContext context) {
-		if(user == null || image == null){
-			return new Container();
+		if(_user == null || _image == null){
+			return Scaffold(
+				body: Center(
+					child: CircularProgressIndicator()
+				),
+			);
 		}
 
 		final theme = Provider.of<ThemeDelegate>(context);
@@ -92,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
 															child: InkWell(
 																child: CircleAvatar(
 																	backgroundColor: Colors.white,
-																	backgroundImage: image,
+																	backgroundImage: _image,
 																),
 																onTap: () {
 																	Navigator.pushNamed(context, '/imageCapture').then((value) { _setUserInfo(); });
@@ -128,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
 																child: Column(
 																	children: <Widget>[
 																		Text(
-																			user.username ?? '',
+																			_user.username ?? '',
 																			style: style.headerStyle3,
 																		),
 																		SizedBox(
@@ -179,7 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
 																			height: 5,
 																		),
 																		Text(
-																				user.email ?? '',
+																				_user.email ?? '',
 																				style: TextStyle(
 																					fontSize: 15.0,
 																				),
@@ -208,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
 																			height: 5,
 																		),
 																		Text(
-																			user.phoneNumber ?? '',
+																			_user.phoneNumber ?? '',
 																			style: TextStyle(
 																				fontSize: 15.0,
 																			),
@@ -261,7 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
 																					style: style.headerStyle3,
 																				),
 																				Text(
-																					'${user.firstName} ${user.lastName}',
+																					'${_user.firstName} ${_user.lastName}',
 																					style: style.subHintTitle,
 																				)
 																			],
@@ -295,7 +301,7 @@ class _ProfilePageState extends State<ProfilePage> {
 																					style: style.headerStyle3,
 																				),
 																				Text(
-																					user.address ?? '',
+																					_user.address ?? '',
 																					style: style.subHintTitle,
 																				)
 																			],
@@ -329,7 +335,7 @@ class _ProfilePageState extends State<ProfilePage> {
 																					style: style.headerStyle3,
 																				),
 																				Text(
-																					user.dateOfBirth ?? '',
+																					_user.dateOfBirth ?? '',
 																					style: style.subHintTitle,
 																				)
 																			],

@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_n_dine/core/model/User.dart';
 
 class UsersCollection {
-	final CollectionReference _usersCollection = Firestore.instance.collection('users');
+	static final UsersCollection instance = UsersCollection();
+
+	static final CollectionReference _usersCollection = Firestore.instance.collection('users');
 
 	Future<void> addUser(User user){
 		return _usersCollection.document(user.id).setData(user.toMap());

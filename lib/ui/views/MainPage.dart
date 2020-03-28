@@ -1,10 +1,13 @@
 
+import 'package:dash_n_dine/core/auth/Auth.dart';
 import 'package:dash_n_dine/core/auth/BasicAuth.dart';
 import 'package:dash_n_dine/core/location/LocationService.dart';
 import 'package:dash_n_dine/core/model/User.dart';
+import 'package:dash_n_dine/core/services/repository.dart';
 import 'package:dash_n_dine/ui/views/HomePage.dart';
 import 'package:dash_n_dine/ui/views/LandingPage.dart';
 import 'package:dash_n_dine/ui/widgets/TopAppBar.dart';
+import 'package:dash_n_dine/ui/widgets/YelpResults.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,10 +23,10 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 	final LocationService _location = LocationService();
+	final Auth _auth = BasicAuth();
 
-	var _auth = BasicAuth();
 	int _selectedIndex = 0;
-	User currentUser;
+	User _currentUser;
 	Position _currentPosition;
 
 
@@ -32,15 +35,18 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 		super.initState();
 		_setCurrentUser();
 		_setCurrentPosition();
+		Repository.get().getBusinesses();//.then((value) => print(value[0])).catchError((e) => print(e));
 	}
 
 	void _setCurrentUser(){
 		_auth.getCurrentUser().then((user) {
 			setState(() {
-			  currentUser = user;
+			  _currentUser = user;
 			});
 		});
 	}
+
+	User getCurrentUser(){ return _currentUser; }
 
 	void _setCurrentPosition(){
 		_location.getCurrentLocation().then((pos) {
@@ -50,21 +56,34 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 		});
 	}
 
+	Position getCurrentPosition(){ return _currentPosition; }
+
 	Widget _getPage(page){
-		if(currentUser == null){
-			return Container();
+		if(_currentUser != null){
+			if(page == 0){
+				return LandingPage();
+			}
+
+			if(page == 1){
+				return SearchPage();
+			}
+
+			/*
+			if(page == 2){
+				return YelpResults();
+			}
+			*/
+
+			if(page == 3){
+				return ProfilePage();
+			}
 		}
 
-		if(page == 0){
-			return LandingPage();
-		}
-		if(page == 1){
-			return SearchPage();
-		}
-
-		if(page == 3){
-			return ProfilePage();
-		}
+		return Scaffold(
+			body: Center(
+					child: CircularProgressIndicator()
+			),
+		);
 	}
 
 	void _onItemTapped(int index){
