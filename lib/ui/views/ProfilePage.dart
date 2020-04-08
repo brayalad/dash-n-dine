@@ -19,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
 	final _auth = BasicAuth();
 	final _loader = FileDownloader();
 
+
 	User _user;
 	ImageProvider _image;
 
@@ -237,8 +238,8 @@ class _ProfilePageState extends State<ProfilePage> {
 													shrinkWrap: true,
 													childAspectRatio: 2.0,
 													children: <Widget>[
-														_buildCard('Reward points', '155', Icons.card_giftcard, 1),
-														_buildCard('Favorites', '5', Icons.favorite, 2),
+														_buildCard('Top Category', _user.topCategory, Icons.card_giftcard, 1),
+														_buildCard('Favorites', _user.favorites.length.toString(), Icons.favorite, 2),
 													],
 												),
 												SizedBox(

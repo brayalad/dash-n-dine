@@ -20,7 +20,7 @@ class _FileUploaderState extends State<FileUploader> {
 	static final String _storageURL = 'gs://dash-n-dine.appspot.com';
 
 	final FirebaseStorage _storage = FirebaseStorage(storageBucket: _storageURL);
-	final Auth _auth = BasicAuth();
+	final Auth _auth = Auth.instance;
 
 	StorageUploadTask _uploadTask;
 
@@ -28,7 +28,7 @@ class _FileUploaderState extends State<FileUploader> {
 
 		User user = await _auth.getCurrentUser();
 
-		String path = 'images/${user.username}_profile_pic';
+		String path = 'images/${user.photoUrl != null && user.photoUrl.isNotEmpty ? user.photoUrl : DateTime.now()}';
 
 		setState(() {
 		  _uploadTask = _storage.ref().child(path).putFile(widget.file);

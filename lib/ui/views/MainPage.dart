@@ -1,8 +1,11 @@
 
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dash_n_dine/core/auth/Auth.dart';
 import 'package:dash_n_dine/core/auth/BasicAuth.dart';
+import 'package:dash_n_dine/core/db/UsersCollection.dart';
 import 'package:dash_n_dine/core/location/LocationService.dart';
 import 'package:dash_n_dine/core/model/User.dart';
+import 'package:dash_n_dine/core/services/recommender.dart';
 import 'package:dash_n_dine/core/services/repository.dart';
 import 'package:dash_n_dine/ui/views/HomePage.dart';
 import 'package:dash_n_dine/ui/views/LandingPage.dart';
@@ -35,7 +38,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 		super.initState();
 		_setCurrentUser();
 		_setCurrentPosition();
-		Repository.get().getBusinesses();//.then((value) => print(value[0])).catchError((e) => print(e));
 	}
 
 	void _setCurrentUser(){
@@ -68,11 +70,22 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 				return SearchPage();
 			}
 
-			/*
+			
 			if(page == 2){
+				/*
+				CloudFunctions.instance
+						.getHttpsCallable(functionName: 'recommend')
+						.call(<String, dynamic> {
+							'favorites': List.from(_currentUser.favorites),
+							'latitude': _currentPosition.latitude,
+							'longitude': _currentPosition.longitude
+						}).then((value) => {
+							print(value.data.toString())
+				});
+				 */
 				return YelpResults();
 			}
-			*/
+			
 
 			if(page == 3){
 				return ProfilePage();
@@ -87,8 +100,19 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 	}
 
 	void _onItemTapped(int index){
+		if(_selectedIndex == 2 && index != 2){
+			_setUserTopCategory();
+		}
 		setState(() {
 			_selectedIndex = index;
+		});
+	}
+
+	void _setUserTopCategory(){
+		Recommender.get().calculateCurrentUserTopCategories()
+				.then((top) {
+					_currentUser.topCategory = top.title;
+					UsersCollection.instance.updateUser(_currentUser);
 		});
 	}
 

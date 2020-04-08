@@ -1,5 +1,6 @@
 import 'package:dash_n_dine/core/model/Business.dart';
 import 'package:dash_n_dine/core/model/BusinessSearch.dart';
+import 'package:dash_n_dine/core/services/recommender.dart';
 import 'package:dash_n_dine/core/services/repository.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class YelpResults extends StatefulWidget {
 
 
 class _YelpResultsState extends State<YelpResults>{
-	Repository _repository = Repository.get();
+	Recommender _recommender = Recommender.get();
 
 
   @override
@@ -21,7 +22,7 @@ class _YelpResultsState extends State<YelpResults>{
 	  return Scaffold(
 			  body: Center(
 				  child: FutureBuilder<List<BusinessSearch>>(
-					  future: _repository.getBusinesses(),
+					  future: _recommender.getRecommendations(),
 					  builder: (context, snapshot) {
 						  if (snapshot.hasData) {
 							  return Padding(

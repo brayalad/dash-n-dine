@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'package:dash_n_dine/core/auth/BasicAuth.dart';
 import 'package:dash_n_dine/core/model/User.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class Auth {
+
+	static final Auth instance = BasicAuth();
+
 	Future<FirebaseUser> signIn(String email, String password);
 
 	Future<FirebaseUser> signUpWithEmail(String email, String password, String name);

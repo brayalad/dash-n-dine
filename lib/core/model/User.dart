@@ -11,7 +11,8 @@ class User {
 	String phoneNumber;
 	String address;
 	String dateOfBirth;
-	List<String> favorites;
+	Set<String> favorites;
+	String topCategory;
 
 	User({
 		@required this.id,
@@ -23,7 +24,8 @@ class User {
 		this.phoneNumber,
 		this.address,
 		this.dateOfBirth,
-		this.favorites
+		this.favorites,
+		this.topCategory
 	});
 
 	getID(){return id; }
@@ -69,7 +71,8 @@ class User {
 				phoneNumber: json['phoneNumber'],
 				address: json['address'],
 				dateOfBirth: json['dateOfBirth'],
-				favorites: json['favorites'].cast<String>()
+				favorites: json['favorites'].cast<String>(),
+				topCategory: json['top_category']
 		);
 	}
 
@@ -85,6 +88,7 @@ class User {
 		data['address'] = this.address;
 		data['dateOfBirth'] = this.dateOfBirth;
 		data['favorites'] = this.favorites;
+		data['top_category'] = this.topCategory;
 
 		return data;
 	}
@@ -100,7 +104,8 @@ class User {
 			phoneNumber: map['phoneNumber'],
 			address: map['address'],
 			dateOfBirth: map['dateOfBirth'],
-			favorites: map['favorites'].cast<String>()
+			favorites: Set.from(map['favorites']),
+			topCategory: map['top_category']
 		);
 	}
 
@@ -115,7 +120,8 @@ class User {
 			'phoneNumber': phoneNumber,
 			'address': address,
 			'dateOfBirth': dateOfBirth,
-			'favoites': favorites.map((v) => v.toString()).toList()
+			'favorites': favorites.map((v) => v.toString()).toList(),
+			'top_category': topCategory
 		};
 	}
 

@@ -1,3 +1,4 @@
+import 'package:dash_n_dine/core/auth/Auth.dart';
 import 'package:dash_n_dine/core/auth/BasicAuth.dart';
 import 'package:dash_n_dine/core/db/UsersCollection.dart';
 import 'package:dash_n_dine/core/location/LocationService.dart';
@@ -21,9 +22,9 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
 	LocationService _location = LocationService();
 
-	final _users = UsersCollection();
-	final _auth = BasicAuth();
-	final _loader = FileDownloader();
+	final _users = UsersCollection.instance;
+	final _auth = Auth.instance;
+	final _loader = FileDownloader.instance;
 
 	User user;
 	ImageProvider image;
@@ -178,7 +179,8 @@ class _SettingsPageState extends State<SettingsPage> {
 													icon: Icon(Icons.edit),
 													onPressed: () {
 														createInputDialog(context, 'Enter Username').then((val) {
-															user.setUsername(val);
+															user.username = val;
+															//user.photoUrl = 'gs://dash-n-dine.appspot.com/images/${user.username}_profile_pic';
 															_users.updateUser(user);
 														});
 													},

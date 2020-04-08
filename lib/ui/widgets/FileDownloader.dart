@@ -5,15 +5,19 @@ import 'package:flutter/material.dart';
 const String STORAGE_URL = 'gs://dash-n-dine.appspot.com';
 
 class FileDownloader {
+	static final FileDownloader instance = FileDownloader();
+
 	final FirebaseStorage _storage = FirebaseStorage.instance;
 
 
 	Future<String> getProfileImageURL(User user) async {
-		return await getImageURL(user.username + '_profile_pic');
+		//return await getImageURL(user.username + '_profile_pic');
+		return await getImageURL(user.photoUrl);
 	}
 
 	Future<Image> getProfileImage(User user) async {
-		return await getImage(user.username + '_profile_pic');
+		//return await getImage(user.username + '_profile_pic');
+		return await getImage(user.photoUrl);
 	}
 
 	Future<String> getImageURL(String image) async {
