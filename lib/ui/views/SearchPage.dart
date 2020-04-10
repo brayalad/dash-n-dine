@@ -5,6 +5,7 @@ import 'package:dash_n_dine/core/db/UsersCollection.dart';
 import 'package:dash_n_dine/core/model/BusinessSearch.dart';
 import 'package:dash_n_dine/core/model/User.dart';
 import 'package:dash_n_dine/core/services/repository.dart';
+import 'package:dash_n_dine/ui/widgets/TitleAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:more/collection.dart';
 import '../shared/text_styles.dart' as style;
@@ -39,6 +40,14 @@ class _SearchPageState extends State<SearchPage>{
   @override
   Widget build(BuildContext context) {
 		return Scaffold(
+			appBar: TitleAppBar(
+					title: 'Search',
+					disableBackArrow: true,
+					text: Text(
+							'Search',
+							style: style.headerStyle2
+					)
+			),
 			body: Container(
 				child: Column(
 					children: <Widget>[

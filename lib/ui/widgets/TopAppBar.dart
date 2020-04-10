@@ -6,6 +6,25 @@ class TopAppBar extends StatelessWidget with PreferredSizeWidget {
 
 	@override
 	Widget build(BuildContext context) {
+
+		var cart = GestureDetector(
+				onTap: () {
+				},
+				child: Icon(
+						Icons.shopping_cart,
+						size: 32
+				)
+		);
+
+		var notifications = GestureDetector(
+			onTap: (){
+			},
+			child: Icon(
+				Icons.notifications_none,
+				size: 32,
+			),
+		);
+
 		size = MediaQuery.of(context).size;
 		return PreferredSize(
 			child: Container(
@@ -17,27 +36,11 @@ class TopAppBar extends StatelessWidget with PreferredSizeWidget {
 					child: Row(
 						mainAxisSize: MainAxisSize.max,
 						children: <Widget>[
-							GestureDetector(
-									onTap: () {
-									},
-									child: Icon(
-											Icons.shopping_cart,
-											size: 32
-									)
-							),
 							Expanded(
 								child: Text(
 									'Dine N Dash',
 									style: style.appBarTextTheme,
 									textAlign: TextAlign.center,
-								),
-							),
-							GestureDetector(
-								onTap: (){
-								},
-								child: Icon(
-									Icons.notifications_none,
-									size: 32,
 								),
 							),
 						],

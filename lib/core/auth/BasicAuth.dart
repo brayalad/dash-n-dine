@@ -10,6 +10,8 @@ class BasicAuth implements Auth {
 	final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 	final UsersCollection _usersCollection = UsersCollection();
 
+	User current;
+
   @override
   Future<FirebaseUser> signIn(String email, String password) async {
 		AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
@@ -59,6 +61,7 @@ class BasicAuth implements Auth {
 
   @override
   Future<void> signOut() async {
+  	current = null;
 		return _firebaseAuth.signOut();
   }
 
@@ -69,7 +72,10 @@ class BasicAuth implements Auth {
 
 	@override
 	Future<User> getCurrentUser() async {
-  	return (await _usersCollection.getUserByID((await getCurrentFirebaseUser()).uid)).first;
+  	if(current == null){
+  		current = await _getCurrentUserImpl();
+	  }
+  	return current;
   }
 
   @override
@@ -91,7 +97,15 @@ class BasicAuth implements Auth {
 		user.sendEmailVerification();
 	}
 
+	@override
+	Future<User> updateUser() async {
+  	current = await _getCurrentUserImpl();
+  	return current;
+	}
 
+	Future<User> _getCurrentUserImpl() async {
+  	return (await _usersCollection.getUserByID((await getCurrentFirebaseUser()).uid));
+	}
 
 }
 

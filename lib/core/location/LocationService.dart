@@ -1,6 +1,9 @@
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {
+
+	static final LocationService instance = LocationService();
+
 	final Geolocator _geolocator = Geolocator();
 
 

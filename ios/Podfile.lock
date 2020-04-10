@@ -308,6 +308,9 @@ PODS:
   - Flutter (1.0.0)
   - flutter_plugin_android_lifecycle (0.0.1):
     - Flutter
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - geolocator (5.3.1):
     - Flutter
   - google_api_availability (2.0.4):
@@ -385,6 +388,9 @@ PODS:
   - PromisesObjC (1.2.8)
   - Protobuf (3.11.4)
   - Reachability (3.2)
+  - sqflite (0.0.1):
+    - Flutter
+    - FMDB (~> 2.7.2)
   - TOCropViewController (2.5.2)
   - url_launcher (0.0.1):
     - Flutter
@@ -415,6 +421,7 @@ DEPENDENCIES:
   - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 SPEC REPOS:
@@ -436,6 +443,7 @@ SPEC REPOS:
     - FirebaseInstanceID
     - FirebaseMessaging
     - FirebaseStorage
+    - FMDB
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
@@ -502,6 +510,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   path_provider_macos:
     :path: ".symlinks/plugins/path_provider_macos/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
 
@@ -540,6 +550,7 @@ SPEC CHECKSUMS:
   FirebaseStorage: 6c5263796af3b1be82ed173598aade47535fe125
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_plugin_android_lifecycle: 47de533a02850f070f5696a623995e93eddcdb9b
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator: 460cc8e850b616f8c0e90944c86517d91ccbb686
   google_api_availability: 15fa42a8cd83c0a6738507ffe6e87096f12abcb8
   google_maps_flutter: d0dd62f5a7d39bae61057eb9f52dd778d99c7c6c
@@ -561,6 +572,7 @@ SPEC CHECKSUMS:
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   TOCropViewController: e9da34f484aedd4e5d5a8ab230ba217cfe16c729
   url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298
 

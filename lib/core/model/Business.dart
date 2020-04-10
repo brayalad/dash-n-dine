@@ -1,8 +1,3 @@
-import 'package:dash_n_dine/core/model/Hours.dart';
-
-import 'Categories.dart';
-import 'Location.dart';
-
 class Business {
 	String id;
 	String alias;
@@ -44,6 +39,16 @@ class Business {
 				this.hours,
 				this.transactions,
 				this.specialHours});
+
+	@override
+	bool operator ==(o) {
+		if(o.runtimeType != runtimeType){
+			return false;
+		}
+
+// ignore: test_types_in_equals
+		return id.compareTo((o as Business).id) == 0;
+	}
 
 	Business.fromJson(Map<String, dynamic> json) {
 		id = json['id'];
@@ -119,5 +124,179 @@ class Business {
 		}
 		return data;
 	}
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => id.hashCode;
+
 }
 
+class Categories {
+	String alias;
+	String title;
+
+	Categories({this.alias, this.title});
+
+	Categories.fromJson(Map<String, dynamic> json) {
+		alias = json['alias'];
+		title = json['title'];
+	}
+
+	Map<String, dynamic> toJson() {
+		final Map<String, dynamic> data = new Map<String, dynamic>();
+		data['alias'] = this.alias;
+		data['title'] = this.title;
+		return data;
+	}
+}
+
+class Location {
+	String address1;
+	String address2;
+	String address3;
+	String city;
+	String zipCode;
+	String country;
+	String state;
+	List<String> displayAddress;
+	String crossStreets;
+
+	Location(
+			{this.address1,
+				this.address2,
+				this.address3,
+				this.city,
+				this.zipCode,
+				this.country,
+				this.state,
+				this.displayAddress,
+				this.crossStreets});
+
+	Location.fromJson(Map<String, dynamic> json) {
+		address1 = json['address1'];
+		address2 = json['address2'];
+		address3 = json['address3'];
+		city = json['city'];
+		zipCode = json['zip_code'];
+		country = json['country'];
+		state = json['state'];
+		displayAddress = json['display_address'].cast<String>();
+		crossStreets = json['cross_streets'];
+	}
+
+	Map<String, dynamic> toJson() {
+		final Map<String, dynamic> data = new Map<String, dynamic>();
+		data['address1'] = this.address1;
+		data['address2'] = this.address2;
+		data['address3'] = this.address3;
+		data['city'] = this.city;
+		data['zip_code'] = this.zipCode;
+		data['country'] = this.country;
+		data['state'] = this.state;
+		data['display_address'] = this.displayAddress;
+		data['cross_streets'] = this.crossStreets;
+		return data;
+	}
+}
+
+class Coordinates {
+	double latitude;
+	double longitude;
+
+	Coordinates({this.latitude, this.longitude});
+
+	Coordinates.fromJson(Map<String, dynamic> json) {
+		latitude = json['latitude'];
+		longitude = json['longitude'];
+	}
+
+	Map<String, dynamic> toJson() {
+		final Map<String, dynamic> data = new Map<String, dynamic>();
+		data['latitude'] = this.latitude;
+		data['longitude'] = this.longitude;
+		return data;
+	}
+}
+
+class Hours {
+	List<Open> open;
+	String hoursType;
+	bool isOpenNow;
+
+	Hours({this.open, this.hoursType, this.isOpenNow});
+
+	Hours.fromJson(Map<String, dynamic> json) {
+		if (json['open'] != null) {
+			open = new List<Open>();
+			json['open'].forEach((v) {
+				open.add(new Open.fromJson(v));
+			});
+		}
+		hoursType = json['hours_type'];
+		isOpenNow = json['is_open_now'];
+	}
+
+	Map<String, dynamic> toJson() {
+		final Map<String, dynamic> data = new Map<String, dynamic>();
+		if (this.open != null) {
+			data['open'] = this.open.map((v) => v.toJson()).toList();
+		}
+		data['hours_type'] = this.hoursType;
+		data['is_open_now'] = this.isOpenNow;
+		return data;
+	}
+}
+
+class Open {
+	bool isOvernight;
+	String start;
+	String end;
+	int day;
+
+	Open({this.isOvernight, this.start, this.end, this.day});
+
+	Open.fromJson(Map<String, dynamic> json) {
+		isOvernight = json['is_overnight'];
+		start = json['start'];
+		end = json['end'];
+		day = json['day'];
+	}
+
+	Map<String, dynamic> toJson() {
+		final Map<String, dynamic> data = new Map<String, dynamic>();
+		data['is_overnight'] = this.isOvernight;
+		data['start'] = this.start;
+		data['end'] = this.end;
+		data['day'] = this.day;
+		return data;
+	}
+}
+
+class SpecialHours {
+	String date;
+	bool isClosed;
+	String start;
+	String end;
+	bool isOvernight;
+
+	SpecialHours(
+			{this.date, this.isClosed, this.start, this.end, this.isOvernight});
+
+	SpecialHours.fromJson(Map<String, dynamic> json) {
+		date = json['date'];
+		isClosed = json['is_closed'];
+		start = json['start'];
+		end = json['end'];
+		isOvernight = json['is_overnight'];
+	}
+
+	Map<String, dynamic> toJson() {
+		final Map<String, dynamic> data = new Map<String, dynamic>();
+		data['date'] = this.date;
+		data['is_closed'] = this.isClosed;
+		data['start'] = this.start;
+		data['end'] = this.end;
+		data['is_overnight'] = this.isOvernight;
+		return data;
+	}
+}

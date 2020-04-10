@@ -1,18 +1,14 @@
 
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dash_n_dine/core/auth/Auth.dart';
 import 'package:dash_n_dine/core/auth/BasicAuth.dart';
 import 'package:dash_n_dine/core/db/UsersCollection.dart';
 import 'package:dash_n_dine/core/location/LocationService.dart';
 import 'package:dash_n_dine/core/model/User.dart';
 import 'package:dash_n_dine/core/services/recommender.dart';
-import 'package:dash_n_dine/core/services/repository.dart';
-import 'package:dash_n_dine/ui/views/HomePage.dart';
-import 'package:dash_n_dine/ui/views/LandingPage.dart';
+import 'package:dash_n_dine/ui/widgets/Favorites.dart';
 import 'package:dash_n_dine/ui/widgets/TopAppBar.dart';
-import 'package:dash_n_dine/ui/widgets/YelpResults.dart';
+import 'package:dash_n_dine/ui/widgets/RecommendResults.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'ProfilePage.dart';
@@ -63,7 +59,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 	Widget _getPage(page){
 		if(_currentUser != null){
 			if(page == 0){
-				return LandingPage();
+				return Favorites();
 			}
 
 			if(page == 1){
@@ -72,18 +68,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
 			
 			if(page == 2){
-				/*
-				CloudFunctions.instance
-						.getHttpsCallable(functionName: 'recommend')
-						.call(<String, dynamic> {
-							'favorites': List.from(_currentUser.favorites),
-							'latitude': _currentPosition.latitude,
-							'longitude': _currentPosition.longitude
-						}).then((value) => {
-							print(value.data.toString())
-				});
-				 */
-				return YelpResults();
+				return RecommendResults();
 			}
 			
 

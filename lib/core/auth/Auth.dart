@@ -24,4 +24,7 @@ abstract class Auth {
 	Future<void> signOut();
 
 	Future<bool> isEmailVerified();
+
+	Future<User> updateUser();
+
 }

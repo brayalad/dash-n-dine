@@ -46,6 +46,9 @@ dependencies:
   more: ^2.2.0
   graphql_flutter: ^3.0.0
   graphql: ^3.0.0
+  async: ^2.4.1
+  dio: ^3.0.9
+  dio_http_cache: ^0.2.6
 
 
 
