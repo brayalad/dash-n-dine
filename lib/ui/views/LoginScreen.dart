@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   }
 
   Future<Null> _playAnimation() async {
-    await _loginButtonController.reset();
+    _loginButtonController.reset();
 
     try {
       await _loginButtonController.forward().whenComplete((){
@@ -62,11 +62,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   }
 
 
-  @override
-  void dispose(){
-    _loginButtonController.dispose();
-    super.dispose();
-  }
+
 
   gotoSignUp() {
     controller.animateToPage(
@@ -118,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
               ),
               textAlign: TextAlign.end,
             ),
-            onPressed: () => {},
+            onPressed: () => gotoSignUp(),
           ),
         )
       ],
@@ -189,54 +185,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                           top: 20.0
                       ),
                       alignment: Alignment.center,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 0.25)
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'OR CONNECT WITH',
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 0.25)
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(
-                          left: 30.0,
-                          right: 30.0,
-                          top: 20.0
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          _UserCustomSocialMediaLoginExpand(
-                            socialMediaName: 'FACEBOOK',
-                            color: Color(0Xff3B5998),
-                          ),
-                          _UserCustomSocialMediaLoginExpand(
-                            socialMediaName: 'GOOGLE',
-                            color: Color(0Xffdb3236),
-                          )
-                        ],
-                      ),
-                    ),
+
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.05,
                     )
@@ -266,13 +217,39 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                         setState(() {
                           animationStatus = 1;
                         });
-                        _playAnimation();
-
-                        var user = await auth.signIn(_emailInputController.text, _pswdInputController.text);
-                        if(user != null){
-                          print("Success");
-                        } else {
-                          print("Fail");
+                        try {
+                          var user = await auth.signIn(
+                              _emailInputController.text,
+                              _pswdInputController.text);
+                          if (user != null) {
+                            print("Success");
+                            _playAnimation();
+                          } else {
+                            throw "Invalid login";
+                          }
+                        } catch(e) {
+                          print(e);
+                          setState(() {
+                            animationStatus = 0;
+                            _emailInputController.clear();
+                            _pswdInputController.clear();
+                          });
+                          return showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Invalid Login'),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('TRY AGAIN'),
+                                    onPressed: (){
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ]
+                              );
+                            }
+                          );
                         }
                       },
                       child: Container(

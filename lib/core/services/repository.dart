@@ -8,6 +8,7 @@ import 'package:dash_n_dine/core/model/Business.dart' as info;
 import 'package:dash_n_dine/core/model/BusinessSearch.dart' as search;
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:executor/executor.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:graphql/client.dart';
 import 'package:http/http.dart' as http;
@@ -49,21 +50,22 @@ class Repository {
 		getToken: () async => 'Bearer $API_KEY',
 	);
 
-	final Dio client = Dio();
-
 
 	static Repository get() {
 		return _repo;
 	}
 
 
+	final Dio _client = Dio();
+
+
 	final Map<String, search.BusinessSearch> _searchCache = HashMap();
 	final Map<String, info.Business> _businessCache = HashMap();
 
 	Repository._internal(){
-		client.options.baseUrl = 'https://api.yelp.com/v3/';
-		client.options.responseType = ResponseType.json;
-		client.options.headers = {HttpHeaders.authorizationHeader: "Bearer $API_KEY"};
+		_client.options.baseUrl = 'https://api.yelp.com/v3/';
+		_client.options.responseType = ResponseType.json;
+		_client.options.headers = {HttpHeaders.authorizationHeader: "Bearer $API_KEY"};
 
 		DioCacheManager manager = DioCacheManager(
 			CacheConfig(
@@ -73,7 +75,7 @@ class Repository {
 			)
 		);
 
-	client.interceptors.add(manager.interceptor);
+	_client.interceptors.add(manager.interceptor);
 
 		Timer.periodic(Duration(hours: 1), (Timer t) => _businessCache.clear());
 	}
@@ -89,7 +91,7 @@ class Repository {
 
 		// Error handling
 		if (response == null || response.statusCode < CODE_OK || response.statusCode >= CODE_REDIRECTION) {
-			return Future.error(response.body);
+			return null;
 		}
 
 		Map<String, dynamic> map = json.decode(response.body);
@@ -119,14 +121,12 @@ class Repository {
 
 		String webAddress = "https://api.yelp.com/v3/businesses/search?latitude=$latitude&longitude=$longitude&term=$term";
 
-		//http.Response response = await http.get(webAddress, headers: AUTH_HEADER).catchError((resp) {});
 
-		Response response = await client.get(webAddress);
+		Response response = await _client.get(webAddress);
 
 
 		// Error handling
 		if (response == null || response.statusCode < CODE_OK || response.statusCode >= CODE_REDIRECTION) {
-			//return Future.error(response.statusMessage);
 			return null;
 		}
 

@@ -24,7 +24,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 	final LocationService _location = LocationService();
 	final Auth _auth = BasicAuth();
 
-	int _selectedIndex = 0;
+	int _selectedIndex = 3;
 	User _currentUser;
 	Position _currentPosition;
 
@@ -57,31 +57,39 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 	Position getCurrentPosition(){ return _currentPosition; }
 
 	Widget _getPage(page){
-		if(_currentUser != null){
-			if(page == 0){
-				return Favorites();
+		try {
+			if (_currentUser != null) {
+				if (page == 0) {
+					return RecommendResults();
+				}
+
+				if (page == 1) {
+					return SearchPage();
+				}
+
+
+				if (page == 2) {
+					return Favorites();
+				}
+
+
+				if (page == 3) {
+					return ProfilePage();
+				}
 			}
 
-			if(page == 1){
-				return SearchPage();
-			}
-
-			
-			if(page == 2){
-				return RecommendResults();
-			}
-			
-
-			if(page == 3){
-				return ProfilePage();
-			}
+			return Scaffold(
+				body: Center(
+						child: CircularProgressIndicator()
+				),
+			);
+		} catch(e){
+			return Scaffold(
+				body: Center(
+						child: LinearProgressIndicator()
+				),
+			);
 		}
-
-		return Scaffold(
-			body: Center(
-					child: CircularProgressIndicator()
-			),
-		);
 	}
 
 	void _onItemTapped(int index){
@@ -112,16 +120,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 				currentIndex: _selectedIndex,
 				items: const <BottomNavigationBarItem>[
 					BottomNavigationBarItem(
-						icon: Icon(Icons.home),
-						title: Text('Home')
+						icon: Icon(Icons.fastfood),
+						title: Text('For You')
 					),
 					BottomNavigationBarItem(
 							icon: Icon(Icons.search),
 							title: Text('Search')
 					),
 					BottomNavigationBarItem(
-							icon: Icon(Icons.fastfood),
-							title: Text('For You')
+							icon: Icon(Icons.favorite),
+							title: Text('Favorites')
 					),
 					BottomNavigationBarItem(
 							icon: Icon(Icons.person),

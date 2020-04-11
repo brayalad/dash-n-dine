@@ -6,7 +6,6 @@ import 'package:sprintf/sprintf.dart';
 import 'package:provider/provider.dart';
 import '../shared/theme.dart';
 
-const String DEFAULT_IMAGE_PATH = 'gs://dash-n-dine.appspot.com/profilepic.jpeg';
 const String PROFILE_PIC_PATH_FORMAT = '%s_profile_pic.jpeg';
 
 class SignUpPage extends StatefulWidget {

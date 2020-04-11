@@ -7,6 +7,7 @@ import 'package:dash_n_dine/core/model/User.dart';
 import 'package:dash_n_dine/core/services/repository.dart';
 import 'package:dash_n_dine/ui/widgets/TitleAppBar.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:more/collection.dart';
 import '../shared/text_styles.dart' as style;
 
@@ -140,6 +141,7 @@ class _SearchResultCardState extends State<SearchResultCard>{
 	final BusinessSearch business;
 
 	bool _liked;
+	bool _moreInfoAvailable = true;
 
   _SearchResultCardState({this.user, this.business});
 
@@ -148,6 +150,11 @@ class _SearchResultCardState extends State<SearchResultCard>{
 	void initState(){
 		super.initState();
 		_liked = user.favorites.contains(business.id);
+		canLaunch(business.url).then((value) {
+			setState(() {
+			 _moreInfoAvailable = value;
+			});
+		});
 	}
 
 
@@ -174,6 +181,12 @@ class _SearchResultCardState extends State<SearchResultCard>{
   	UsersCollection.instance.updateUser(user);
 	}
 
+	_launchURL(String url) async {
+		if(await canLaunch(url)){
+			await launch(url);
+		}
+	}
+
   @override
   Widget build(BuildContext context) {
 		if(user == null || business == null){
@@ -193,14 +206,14 @@ class _SearchResultCardState extends State<SearchResultCard>{
 					    height: 80,
 				    ),
 				    title: Text('${business.name}'),
-				    subtitle: Text('${business.location.address1}\n${business.categories[0].title}'),
+				    subtitle: Text('${business.location.address1}\n${business.categories[0].title}\n${business.rating.toStringAsFixed(1)} stars'),
 			    ),
 			    // make buttons use the appropriate styles for cards
 			    ButtonBar(
 				    children: <Widget>[
 					    IconButton(
 						    icon: Icon(_liked ? Icons.favorite : Icons.favorite_border),
-						    color: Colors.red,
+						    color: Theme.of(context).primaryColor,
 						    onPressed: (){
 									if(_liked){
 										_unlike();
@@ -209,26 +222,21 @@ class _SearchResultCardState extends State<SearchResultCard>{
 									}
 						    },
 					    ),
-					    FlatButton(
-						    child: const Text('WEBSITE'),
-						    // ignore: deprecated_member_use
-						    onPressed: () {
-							    //_launchURL(snapshot.data[index].url);
-						    },
-					    ),
-					    FlatButton(
-						    child: const Text('NAVIGATE'),
-						    onPressed: () {
-							    //todo: launch using google/apple maps
-						    },
-					    ),
+					    Visibility(
+						    visible: _moreInfoAvailable,
+						    child: FlatButton(
+							    child: const Text('MORE INFO'),
+							    onPressed: () {
+								    _launchURL(business.url);
+							    },
+						    ),
+					    )
 				    ],
 			    ),
 		    ],
 	    ),
     );
   }
-	
-	
+
 }
 

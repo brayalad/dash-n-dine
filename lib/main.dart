@@ -42,6 +42,7 @@ class _MaterialAppWithThemeState extends State<MaterialAppWithTheme> {
         initialRoute: '/splashPage',
         theme: theme.getTheme(),
         title: 'Dash N Dine',
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

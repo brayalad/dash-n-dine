@@ -38,7 +38,7 @@ class TopAppBar extends StatelessWidget with PreferredSizeWidget {
 						children: <Widget>[
 							Expanded(
 								child: Text(
-									'Dine N Dash',
+									"Dine N' Dash",
 									style: style.appBarTextTheme,
 									textAlign: TextAlign.center,
 								),

@@ -180,7 +180,6 @@ class _SettingsPageState extends State<SettingsPage> {
 													onPressed: () {
 														createInputDialog(context, 'Enter Username').then((val) {
 															user.username = val;
-															//user.photoUrl = 'gs://dash-n-dine.appspot.com/images/${user.username}_profile_pic';
 															_users.updateUser(user);
 														});
 													},
@@ -204,7 +203,14 @@ class _SettingsPageState extends State<SettingsPage> {
 														title: Text("Change Email"),
 														trailing: Icon(Icons.keyboard_arrow_right),
 														onTap: () {
-
+															createInputDialog(context, 'Enter Email').then((val) {
+																user.email = val;
+																_users.updateUser(user);
+																Auth.instance.getCurrentFirebaseUser()
+																		.then((user) {
+																			user.updateEmail(val);
+																});
+															});
 														},
 													),
 													_buildDivider(),
@@ -216,7 +222,11 @@ class _SettingsPageState extends State<SettingsPage> {
 														title: Text("Change Password"),
 														trailing: Icon(Icons.keyboard_arrow_right),
 														onTap: () {
-															//open change language
+															createInputDialog(context, 'Enter Email').then((value){
+																Auth.instance.getCurrentFirebaseUser().then((user){
+																	user.updatePassword(value);
+																});
+															});
 														},
 													),
 													_buildDivider(),
@@ -352,7 +362,9 @@ class _SettingsPageState extends State<SettingsPage> {
 										color: Colors.white,
 									),
 									onPressed: () {
-										//log out
+										Auth.instance.signOut().then((value) {
+											Navigator.pushReplacementNamed(context, '/splashPage');
+										});
 									},
 								),
 							)

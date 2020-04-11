@@ -171,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
 														mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 														children: <Widget>[
 															Container(
-																width: MediaQuery.of(context).size.width * 0.45,
+																width: MediaQuery.of(context).size.width * 0.4,
 																child: Column(
 																	mainAxisAlignment: MainAxisAlignment.center,
 																	children: <Widget>[
@@ -201,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
 																height: 40.0,
 															),
 															Container(
-																width: MediaQuery.of(context).size.width * 0.45,
+																width: MediaQuery.of(context).size.width * 0.4,
 																child: Column(
 																	children: <Widget>[
 																		Text(

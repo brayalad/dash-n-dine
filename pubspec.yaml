@@ -49,6 +49,7 @@ dependencies:
   async: ^2.4.1
   dio: ^3.0.9
   dio_http_cache: ^0.2.6
+  executor: ^2.2.1
 
 
 
@@ -59,7 +60,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.4
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo-icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -75,7 +81,7 @@ flutter:
   assets:
     - assets/
     - assets/logo.png
-    - assets/profilepic.jpeg
+    - assets/logo-icon.png
 
 
 
