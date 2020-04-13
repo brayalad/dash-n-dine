@@ -3,6 +3,7 @@
 # Configuration
 
 lib/core/config/Configuration.dart
+debug_info/
 
 # Miscellaneous
 *.class
