@@ -6,13 +6,13 @@ import 'dart:io';
 import 'package:dash_n_dine/core/location/LocationService.dart';
 import 'package:dash_n_dine/core/model/Business.dart' as info;
 import 'package:dash_n_dine/core/model/BusinessSearch.dart' as search;
+import 'package:dash_n_dine/core/config/Configuration.dart' as config;
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
-import 'package:executor/executor.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:graphql/client.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
+
 
 class ParsedResponse<T> {
 	ParsedResponse(this.statusCode, this.body);
@@ -34,7 +34,7 @@ class Repository {
 
 	static final LocationService _geolocator = LocationService.instance;
 	static final Repository _repo = Repository._internal();
-	static const String API_KEY = "ods8ZNQoGmd7dasK7_nJLxyDzqeMZMdsX804ljCemd4uEg_NR8r0TRguFnSQKAChYxO5FB5ELXv3M9UTHuDOgenwEnzkBqcJ_9hx_Ll2yh33NZTkNSgl7kjwgWB8XnYx";
+	static const String API_KEY = config.API_KEY;
 	static const String GRAPH_QL_ENDPOINT = 'https://api.yelp.com/v3/graphql';
 	static const Map<String, String> AUTH_HEADER = {"Authorization": "Bearer $API_KEY"};
 	static const Map<String, String> GRAPH_QL_AUTH_HEADER = {

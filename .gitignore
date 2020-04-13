@@ -1,5 +1,9 @@
 !/.gitignore
 
+# Configuration
+
+lib/core/config/Configuration.dartaqqq
+
 # Miscellaneous
 *.class
 *.log
@@ -71,6 +75,7 @@ doc/api/
 **/android/gradlew
 **/android/gradlew.bat
 **/android/local.properties
+**/android/key.properties
 **/android/**/GeneratedPluginRegistrant.java
 
 # iOS/XCode related
