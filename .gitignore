@@ -2,7 +2,7 @@
 
 # Configuration
 
-lib/core/config/Configuration.dartaqqq
+lib/core/config/Configuration.dart
 
 # Miscellaneous
 *.class
