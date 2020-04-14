@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../shared/text_styles.dart' as style;
+import 'package:dash_n_dine/core/config/Configuration.dart' as config;
 
 class TopAppBar extends StatelessWidget with PreferredSizeWidget {
 	Size size;
@@ -38,7 +41,7 @@ class TopAppBar extends StatelessWidget with PreferredSizeWidget {
 						children: <Widget>[
 							Expanded(
 								child: Text(
-									"Dine N' Dash",
+									Platform.isIOS ? config.IOS_TITLE : config.ANDROID_TITLE,
 									style: style.appBarTextTheme,
 									textAlign: TextAlign.center,
 								),

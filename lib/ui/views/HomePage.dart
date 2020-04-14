@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dash_n_dine/core/config/Configuration.dart' as config;
 import 'package:flutter/material.dart';
 import './SignupPage.dart';
 import './LoginScreen.dart';
@@ -49,7 +52,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 						),
 					),
 					Text(
-						" N' ",
+						Platform.isIOS ? config.IOS_TITLE_MID : config.ANDROID_TITLE_MID,
 						style: TextStyle(
 								color: Colors.white,
 								fontSize: 20.0,
