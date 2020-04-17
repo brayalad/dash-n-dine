@@ -25,24 +25,18 @@
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>This app needs access to location when open.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>This app needs access to location when in the background.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>This app needs access to location when open and in the background.</string>
+    <string>This allows us to use your location when searching for dining recommendations so that recommendations made are near to you. You can also use current location when setting the address</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow user to upload pictures</string>
+	<string>This allows you to upload your own picture on your profile</string>
     <key>NSCameraUsageDescription</key>
-	<string>Allow user to take picture to upload</string>
+	<string>This allows you to take a picture and upload it to your profile</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>Allow user to record video to upload</string>
+    <string>Allows you to search for places using your voice</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
