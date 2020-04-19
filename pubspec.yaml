@@ -11,7 +11,7 @@ description: A flutter application that randomly recommends what to eat to the u
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.3+1
+version: 1.0.4+1
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -45,7 +45,7 @@ dependencies:
   more: ^2.2.0
   graphql_flutter: ^3.0.0
   graphql: ^3.0.0
-  async: ^2.4.1
+  async: ^2.4.0
   dio: ^3.0.9
   dio_http_cache: ^0.2.6
   executor: ^2.2.1

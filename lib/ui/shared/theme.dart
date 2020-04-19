@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/services.dart';
+
 enum delegateState {
   idle_light,
   idle_dark,
@@ -61,6 +63,10 @@ class ThemeDelegate with ChangeNotifier {
 
   ThemeDelegate(){
     this._themeData = lightTheme;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.black, // Color for Android
+        statusBarBrightness: Brightness.light // Dark == white status bar -- for IOS.
+    ));
   }
 
   getDelegateAdmin() => this.delegateStateAdmin;
@@ -76,6 +82,10 @@ class ThemeDelegate with ChangeNotifier {
       );
       this.delegateStateAdmin = delegateState.idle_dark;
       this._themeData = darkTheme;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+          statusBarColor: Colors.white, // Color for Android
+          statusBarBrightness: Brightness.dark // Dark == white status bar -- for IOS.
+      ));
     } else {
       this.delegateStateAdmin = delegateState.switch_light;
       notifyListeners();
@@ -86,6 +96,10 @@ class ThemeDelegate with ChangeNotifier {
       );
       this.delegateStateAdmin = delegateState.idle_light;
       this._themeData = lightTheme;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+          statusBarColor: Colors.black, // Color for Android
+          statusBarBrightness: Brightness.light // Dark == white status bar -- for IOS.
+      ));
     }
     notifyListeners();
   }
