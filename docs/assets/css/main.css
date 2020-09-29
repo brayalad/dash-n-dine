@@ -1796,8 +1796,9 @@ input, select, textarea {
 /* List */
 
 	ul {
-		list-style: disc;
+		list-style: inside;
 		padding-left: 1em;
+		text-align: center;
 	}
 
 		ul li {

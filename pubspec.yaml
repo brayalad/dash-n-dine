@@ -22,7 +22,7 @@ dependencies:
   provider: ^3.0.0+1
   get_it: ^1.0.3+2
   firebase_core: ^0.4.4+3
-  firebase_analytics: ^5.0.11
+  #firebase_analytics: ^5.0.11
   firebase_auth: ^0.15.5+3
   cloud_firestore: ^0.13.3
   cloud_functions: 0.4.2+3
@@ -39,7 +39,7 @@ dependencies:
   google_maps_flutter: ^0.5.25+1
   flutter_google_places: ^0.2.4
   http: ^0.12.0
-  url_launcher: ^4.0.3
+  url_launcher: ^5.4.1
   unit_converter: ^1.1.0
   square_connect: ^1.1.0
   more: ^2.2.0
